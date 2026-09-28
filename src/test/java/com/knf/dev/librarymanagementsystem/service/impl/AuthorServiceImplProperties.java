@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import com.knf.dev.librarymanagementsystem.entity.Author;
 import com.knf.dev.librarymanagementsystem.exception.NotFoundException;
 import com.knf.dev.librarymanagementsystem.repository.AuthorRepository;
+import com.knf.dev.librarymanagementsystem.support.InMemoryAuthorCatalog;
 
 import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
@@ -86,6 +87,30 @@ class AuthorServiceImplProperties {
 		service.updateAuthor(author);
 
 		verify(repository).save(author);
+	}
+
+	@Property(tries = 25)
+	void cicloVacioCrearLeerActualizarBorrar(
+			@ForAll @StringLength(min = 1, max = 40) String name,
+			@ForAll @StringLength(min = 1, max = 80) String description) {
+		InMemoryAuthorCatalog catalog = new InMemoryAuthorCatalog();
+		AuthorServiceImpl service = catalog.service();
+
+		assertTrue(service.findAllAuthors().isEmpty());
+
+		Author author = new Author(name, description);
+		service.createAuthor(author);
+		Long id = author.getId();
+		assertEquals(name, service.findAuthorById(id).getName());
+
+		Author stored = service.findAuthorById(id);
+		stored.setDescription(description + "-upd");
+		service.updateAuthor(stored);
+		assertEquals(description + "-upd", service.findAuthorById(id).getDescription());
+
+		service.deleteAuthor(id);
+		assertTrue(service.findAllAuthors().isEmpty());
+		assertThrows(NotFoundException.class, () -> service.findAuthorById(id));
 	}
 
 	private List<Author> authors(int n) {

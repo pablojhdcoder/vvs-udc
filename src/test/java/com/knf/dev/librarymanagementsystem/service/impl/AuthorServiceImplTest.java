@@ -9,6 +9,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import com.knf.dev.librarymanagementsystem.entity.Author;
 import com.knf.dev.librarymanagementsystem.exception.NotFoundException;
 import com.knf.dev.librarymanagementsystem.repository.AuthorRepository;
+import com.knf.dev.librarymanagementsystem.support.InMemoryAuthorCatalog;
 
 class AuthorServiceImplTest {
 
@@ -160,6 +162,84 @@ class AuthorServiceImplTest {
 
 			assertTrue(pagina.getContent().isEmpty());
 			assertEquals(2, pagina.getTotalElements());
+		}
+	}
+
+	@Nested
+	@DisplayName("Combinaciones de estado del catálogo")
+	class CombinacionesDeEstado {
+
+		private InMemoryAuthorCatalog catalogo;
+
+		@BeforeEach
+		void catalogoVacio() {
+			catalogo = new InMemoryAuthorCatalog();
+		}
+
+		@Test
+		@DisplayName("vacío → crear → leer → actualizar → borrar → ya no está")
+		void cicloCompletoDelAutor() {
+			AuthorServiceImpl service = catalogo.service();
+
+			assertTrue(service.findAllAuthors().isEmpty());
+			assertThrows(NotFoundException.class, () -> service.findAuthorById(1L));
+
+			Author nuevo = new Author("Ada", "primera programadora");
+			service.createAuthor(nuevo);
+			assertEquals(1, catalogo.size());
+			assertEquals("Ada", service.findAuthorById(nuevo.getId()).getName());
+			assertEquals(1, service.findAllAuthors().size());
+
+			Author leido = service.findAuthorById(nuevo.getId());
+			leido.setName("Ada Lovelace");
+			leido.setDescription("matemática");
+			service.updateAuthor(leido);
+
+			Author actualizado = service.findAuthorById(nuevo.getId());
+			assertEquals("Ada Lovelace", actualizado.getName());
+			assertEquals("matemática", actualizado.getDescription());
+			assertEquals(1, catalogo.size());
+
+			service.deleteAuthor(nuevo.getId());
+			assertEquals(0, catalogo.size());
+			assertTrue(service.findAllAuthors().isEmpty());
+			assertThrows(NotFoundException.class, () -> service.findAuthorById(nuevo.getId()));
+			assertThrows(NotFoundException.class, () -> service.deleteAuthor(nuevo.getId()));
+		}
+
+		@Test
+		@DisplayName("paginación recorre catálogo vacío, con autores y otra vez vacío")
+		void paginacionSegunElEstadoDelCatalogo() {
+			AuthorServiceImpl service = catalogo.service();
+			PageRequest primera = PageRequest.of(0, 2);
+
+			Page<Author> vacia = service.findPaginated(primera);
+			assertTrue(vacia.getContent().isEmpty());
+			assertEquals(0, vacia.getTotalElements());
+
+			service.createAuthor(new Author("A", "d"));
+			service.createAuthor(new Author("B", "d"));
+			service.createAuthor(new Author("C", "d"));
+
+			Page<Author> pagina0 = service.findPaginated(primera);
+			assertEquals(2, pagina0.getContent().size());
+			assertEquals(3, pagina0.getTotalElements());
+
+			Page<Author> pagina1 = service.findPaginated(PageRequest.of(1, 2));
+			assertEquals(1, pagina1.getContent().size());
+			assertEquals(3, pagina1.getTotalElements());
+
+			Page<Author> fuera = service.findPaginated(PageRequest.of(5, 2));
+			assertTrue(fuera.getContent().isEmpty());
+			assertEquals(3, fuera.getTotalElements());
+
+			for (Author author : new ArrayList<>(service.findAllAuthors())) {
+				service.deleteAuthor(author.getId());
+			}
+
+			Page<Author> otraVezVacia = service.findPaginated(primera);
+			assertTrue(otraVezVacia.getContent().isEmpty());
+			assertEquals(0, otraVezVacia.getTotalElements());
 		}
 	}
 }

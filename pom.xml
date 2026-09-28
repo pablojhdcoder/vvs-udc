@@ -144,6 +144,37 @@
 							<goal>report</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>check-author</id>
+						<phase>test</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<haltOnFailure>true</haltOnFailure>
+							<rules>
+								<rule>
+									<element>CLASS</element>
+									<includes>
+										<include>com.knf.dev.librarymanagementsystem.entity.Author</include>
+										<include>com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImpl</include>
+									</includes>
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>1.00</minimum>
+										</limit>
+										<limit>
+											<counter>BRANCH</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>1.00</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>
@@ -167,12 +198,14 @@
 						<param>com.knf.dev.librarymanagementsystem.entity.AuthorProperties</param>
 						<param>com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImplTest*</param>
 						<param>com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImplProperties</param>
+						<param>com.knf.dev.librarymanagementsystem.quality.*</param>
 					</targetTests>
 					<outputFormats>
 						<param>HTML</param>
 						<param>XML</param>
 					</outputFormats>
 					<timestampedReports>false</timestampedReports>
+					<mutationThreshold>90</mutationThreshold>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -185,8 +218,17 @@
 					<failsOnError>false</failsOnError>
 					<failOnViolation>false</failOnViolation>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/AuthorTest.java,**/service/impl/AuthorServiceImplTest.java,**/service/impl/AuthorServiceImplProperties.java,**/entity/AuthorProperties.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java</includes>
+					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java</includes>
 				</configuration>
+				<executions>
+					<execution>
+						<id>checkstyle-author</id>
+						<phase>test</phase>
+						<goals>
+							<goal>checkstyle</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>com.github.spotbugs</groupId>
@@ -198,6 +240,15 @@
 					<effort>Max</effort>
 					<xmlOutput>true</xmlOutput>
 				</configuration>
+				<executions>
+					<execution>
+						<id>spotbugs-author</id>
+						<phase>test</phase>
+						<goals>
+							<goal>spotbugs</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

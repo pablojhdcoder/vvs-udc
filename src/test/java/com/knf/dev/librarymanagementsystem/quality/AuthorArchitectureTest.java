@@ -1,8 +1,9 @@
-package com.knf.dev.librarymanagementsystem.architecture;
+package com.knf.dev.librarymanagementsystem.quality;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
+import com.knf.dev.librarymanagementsystem.repository.AuthorRepository;
 import com.knf.dev.librarymanagementsystem.service.AuthorService;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -24,6 +25,11 @@ class AuthorArchitectureTest {
 			.that().haveSimpleName("AuthorServiceImpl")
 			.should().resideInAPackage("..service.impl..")
 			.andShould().implement(AuthorService.class);
+
+	@ArchTest
+	static final ArchRule authorServiceImplDependsOnRepository = classes()
+			.that().haveSimpleName("AuthorServiceImpl")
+			.should().dependOnClassesThat().areAssignableTo(AuthorRepository.class);
 
 	@ArchTest
 	static final ArchRule authorEntityDoesNotDependOnUpperLayers = noClasses()

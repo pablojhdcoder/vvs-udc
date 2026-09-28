@@ -77,4 +77,40 @@ class AuthorTest {
 			assertTrue(author.getBooks().contains(book));
 		}
 	}
+
+	@Nested
+	@DisplayName("Combinaciones de estado")
+	class CombinacionesDeEstado {
+
+		@Test
+		@DisplayName("sin libros → con libros → otra vez vacío en el mismo autor")
+		void sinLibrosLuegoConLibrosLuegoVacio() {
+			Author author = createAuthor("Ada", "matemática");
+			assertTrue(author.getBooks().isEmpty());
+
+			Book book = new Book("978-1", "Clean Code", "CC-1", "desc");
+			Set<Book> conLibros = new HashSet<>();
+			conLibros.add(book);
+			author.setBooks(conLibros);
+
+			assertEquals(1, author.getBooks().size());
+			assertTrue(author.getBooks().contains(book));
+
+			author.setBooks(new HashSet<>());
+			assertTrue(author.getBooks().isEmpty());
+		}
+
+		@Test
+		@DisplayName("getBooks devuelve el set vivo: un add externo cambia el estado del autor")
+		void getBooksExponeElSetInterno() {
+			Author author = createAuthor("Ada", "matemática");
+			Book book = new Book("978-1", "Clean Code", "CC-1", "desc");
+
+			author.getBooks().add(book);
+			assertTrue(author.getBooks().contains(book));
+
+			author.getBooks().clear();
+			assertTrue(author.getBooks().isEmpty());
+		}
+	}
 }

@@ -1,4 +1,4 @@
-package com.knf.dev.librarymanagementsystem.performance;
+package com.knf.dev.librarymanagementsystem.quality;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -38,6 +38,8 @@ class AuthorServiceImplPerformanceTest {
 
 			assertTrue(report.contains("findPaginated.n=100"));
 			assertTrue(report.contains("findPaginated.n=5000"));
+			assertTrue(report.contains("50"));
+			assertTrue(report.contains("20"));
 			System.out.println(report);
 		} finally {
 			monitor.stop();
