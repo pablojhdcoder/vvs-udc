@@ -111,6 +111,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.5.2</version>
 				<configuration>
 					<includes>
 						<include>**/*Test.java</include>
@@ -120,7 +121,6 @@
 					<excludes>
 						<exclude>**/architecture/**</exclude>
 						<exclude>**/performance/**</exclude>
-						<exclude>**/integration/**</exclude>
 						<exclude>**/system/**</exclude>
 						<exclude>**/acceptance/**</exclude>
 					</excludes>
@@ -185,7 +185,7 @@
 					<failsOnError>false</failsOnError>
 					<failOnViolation>false</failOnViolation>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/AuthorTest.java,**/service/impl/AuthorServiceImplTest.java,**/service/impl/AuthorServiceImplProperties.java,**/entity/AuthorProperties.java</includes>
+					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/AuthorTest.java,**/service/impl/AuthorServiceImplTest.java,**/service/impl/AuthorServiceImplProperties.java,**/entity/AuthorProperties.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java</includes>
 				</configuration>
 			</plugin>
 			<plugin>

@@ -6,4 +6,10 @@
 	<Match>
 		<Class name="com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImpl"/>
 	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.entity.Book"/>
+	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.service.impl.BookServiceImpl"/>
+	</Match>
 </FindBugsFilter>
