@@ -7,7 +7,7 @@ import net.jqwik.api.ForAll;
 import net.jqwik.api.Property;
 import net.jqwik.api.constraints.StringLength;
 
-/** Datos aleatorios (jqwik) para as operacións públicas de Book. Un assert por propiedade. */
+/** Datos aleatorios (jqwik) para las operaciones públicas de Book. Un assert por propiedad. */
 class BookProperties {
 
   @Property(tries = 40)

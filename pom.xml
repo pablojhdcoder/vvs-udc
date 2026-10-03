@@ -89,6 +89,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>net.jqwik</groupId>
+			<artifactId>jqwik-spring</artifactId>
+			<version>0.8.2</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.tngtech.archunit</groupId>
 			<artifactId>archunit-junit5</artifactId>
 			<version>${archunit.version}</version>
@@ -249,7 +255,7 @@
 					<failsOnError>false</failsOnError>
 					<failOnViolation>false</failOnViolation>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/support/InMemoryBookCatalog.java</includes>
+					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/integration/BookServiceIntegrationProperties.java,**/support/InMemoryBookCatalog.java</includes>
 				</configuration>
 				<executions>
 					<execution>

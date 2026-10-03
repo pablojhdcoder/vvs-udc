@@ -24,8 +24,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 /**
- * BookServiceImpl non garda estado: o historial vive no repositorio. Cada método comproba unha
- * cousa. O ciclo do catálogo usa un mock con memoria e agrupa as comprobacións en assertAll.
+ * BookServiceImpl no guarda estado: el historial vive en el repositorio. Cada método comprueba una
+ * cosa. El ciclo del catálogo usa un mock con memoria y agrupa las comprobaciones en assertAll.
  */
 class BookServiceImplTest {
 
@@ -53,7 +53,7 @@ class BookServiceImplTest {
   class FindAll {
 
     @Test
-    @DisplayName("catálogo con libros: devolve a lista do repositorio")
+    @DisplayName("catálogo con libros: devuelve la lista del repositorio")
     void devolveLista() {
       List<Book> libros = List.of(libro(1L, "111"), libro(2L, "222"));
       when(bookRepository.findAll()).thenReturn(libros);
@@ -62,7 +62,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("catálogo baleiro: devolve lista baleira")
+    @DisplayName("catálogo vacío: devuelve lista vacía")
     void catalogoBaleiro() {
       when(bookRepository.findAll()).thenReturn(List.of());
 
@@ -85,7 +85,7 @@ class BookServiceImplTest {
   class Search {
 
     @Test
-    @DisplayName("keyword non nula: devolve o resultado de search")
+    @DisplayName("keyword no nula: devuelve el resultado de search")
     void keywordDevolveResultado() {
       List<Book> encontrados = List.of(libro(1L, "111"));
       when(bookRepository.search("java")).thenReturn(encontrados);
@@ -94,7 +94,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("keyword baleira non é null: tamén usa search")
+    @DisplayName("keyword vacía no es null: también usa search")
     void keywordBaleiraUsaSearch() {
       when(bookRepository.search("")).thenReturn(List.of());
 
@@ -104,7 +104,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("keyword non nula non chama a findAll")
+    @DisplayName("keyword no nula no llama a findAll")
     void keywordNonChamaFindAll() {
       when(bookRepository.search("java")).thenReturn(List.of());
 
@@ -114,7 +114,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("keyword null: devolve findAll")
+    @DisplayName("keyword null: devuelve findAll")
     void nullDevolveFindAll() {
       List<Book> todos = List.of(libro(1L, "111"));
       when(bookRepository.findAll()).thenReturn(todos);
@@ -123,7 +123,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("keyword null non chama a search")
+    @DisplayName("keyword null no llama a search")
     void nullNonChamaSearch() {
       when(bookRepository.findAll()).thenReturn(List.of());
 
@@ -133,7 +133,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("keyword null e catálogo baleiro")
+    @DisplayName("keyword null y catálogo vacío")
     void nullConCatalogoBaleiro() {
       when(bookRepository.findAll()).thenReturn(List.of());
 
@@ -146,7 +146,7 @@ class BookServiceImplTest {
   class FindById {
 
     @Test
-    @DisplayName("partición existe: devolve ese libro")
+    @DisplayName("partición existe: devuelve ese libro")
     void existente() {
       Book book = libro(1L, "111");
       when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
@@ -155,7 +155,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("partición non existe: lanza NotFoundException")
+    @DisplayName("partición no existe: lanza NotFoundException")
     void inexistente() {
       when(bookRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -163,7 +163,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("a mensaxe inclúe o id pedido")
+    @DisplayName("el mensaje incluye el id pedido")
     void mensaxeInclueId() {
       when(bookRepository.findById(99L)).thenReturn(Optional.empty());
       String mensaxe = null;
@@ -177,7 +177,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("fronteira id 0 inexistente")
+    @DisplayName("frontera id 0 inexistente")
     void idCero() {
       when(bookRepository.findById(0L)).thenReturn(Optional.empty());
 
@@ -190,7 +190,7 @@ class BookServiceImplTest {
   class Create {
 
     @Test
-    @DisplayName("garda o libro recibido")
+    @DisplayName("guarda el libro recibido")
     void gardaLibro() {
       Book book = libro(1L, "111");
 
@@ -200,7 +200,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("garda outro libro distinto")
+    @DisplayName("guarda otro libro distinto")
     void gardaOutroLibro() {
       Book book = libro(8L, "888");
 
@@ -215,7 +215,7 @@ class BookServiceImplTest {
   class Update {
 
     @Test
-    @DisplayName("garda o libro co nome novo")
+    @DisplayName("guarda el libro con el nombre nuevo")
     void gardaNomeNovo() {
       Book book = libro(1L, "111");
       book.setName("Refactoring");
@@ -226,7 +226,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("garda o libro co isbn novo")
+    @DisplayName("guarda el libro con el isbn nuevo")
     void gardaIsbnNovo() {
       Book book = libro(1L, "111");
       book.setIsbn("999");
@@ -242,7 +242,7 @@ class BookServiceImplTest {
   class Delete {
 
     @Test
-    @DisplayName("se existe, borra polo id do libro atopado")
+    @DisplayName("si existe, borra por el id del libro encontrado")
     void borraSeExiste() {
       Book book = libro(1L, "111");
       when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
@@ -253,7 +253,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("borra o id do libro atopado, aínda que a busca usase outro")
+    @DisplayName("borra el id del libro encontrado, aunque la búsqueda usara otro")
     void borraIdDaEntidade() {
       Book book = libro(9L, "111");
       when(bookRepository.findById(5L)).thenReturn(Optional.of(book));
@@ -264,7 +264,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("se existe, busca antes de borrar")
+    @DisplayName("si existe, busca antes de borrar")
     void buscaAntesDeBorrar() {
       Book book = libro(1L, "111");
       when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
@@ -275,7 +275,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("se non existe, lanza NotFoundException")
+    @DisplayName("si no existe, lanza NotFoundException")
     void inexistenteLanza() {
       when(bookRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -283,14 +283,14 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("se non existe, non chama a deleteById")
+    @DisplayName("si no existe, no llama a deleteById")
     void inexistenteNonBorra() {
       when(bookRepository.findById(99L)).thenReturn(Optional.empty());
 
       try {
         bookService.deleteBook(99L);
       } catch (NotFoundException ex) {
-        // a comprobación é que non se borra
+        // la comprobación es que no se borra
       }
 
       verify(bookRepository, never()).deleteById(anyLong());
@@ -302,7 +302,7 @@ class BookServiceImplTest {
   class Paginacion {
 
     @Test
-    @DisplayName("primeira páxina devolve os dous primeiros")
+    @DisplayName("primera página devuelve los dos primeros")
     void primeiraPaxina() {
       List<Book> todos = cincoLibros();
       when(bookRepository.findAll()).thenReturn(todos);
@@ -313,7 +313,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("o total é o da lista completa")
+    @DisplayName("el total es el de la lista completa")
     void conservaTotal() {
       when(bookRepository.findAll()).thenReturn(cincoLibros());
 
@@ -323,7 +323,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("última páxina parcial: un elemento")
+    @DisplayName("última página parcial: un elemento")
     void ultimaPaxinaParcial() {
       when(bookRepository.findAll()).thenReturn(cincoLibros());
 
@@ -333,7 +333,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("fronteira start == tamaño: páxina baleira")
+    @DisplayName("frontera start == tamaño: página vacía")
     void fronteiraStartIgualAoTamano() {
       when(bookRepository.findAll()).thenReturn(List.of(libro(1L, "1"), libro(2L, "2")));
 
@@ -343,7 +343,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("páxina moi por riba do rango: baleira")
+    @DisplayName("página muy por encima del rango: vacía")
     void foraDeRangoBaleira() {
       when(bookRepository.findAll()).thenReturn(cincoLibros());
 
@@ -353,7 +353,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("fóra de rango o total non cambia")
+    @DisplayName("fuera de rango el total no cambia")
     void foraDeRangoConservaTotal() {
       when(bookRepository.findAll()).thenReturn(cincoLibros());
 
@@ -363,7 +363,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("catálogo baleiro: contido baleiro")
+    @DisplayName("catálogo vacío: contenido vacío")
     void catalogoBaleiro() {
       when(bookRepository.findAll()).thenReturn(List.of());
 
@@ -373,7 +373,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("catálogo baleiro: total 0")
+    @DisplayName("catálogo vacío: total 0")
     void catalogoBaleiroTotalCero() {
       when(bookRepository.findAll()).thenReturn(List.of());
 
@@ -383,7 +383,7 @@ class BookServiceImplTest {
     }
 
     @Test
-    @DisplayName("pageSize maior que a lista devolve todos")
+    @DisplayName("pageSize mayor que la lista devuelve todos")
     void pageSizeMaiorCaLista() {
       List<Book> todos = List.of(libro(1L, "1"), libro(2L, "2"));
       when(bookRepository.findAll()).thenReturn(todos);
@@ -395,11 +395,11 @@ class BookServiceImplTest {
   }
 
   @Nested
-  @DisplayName("Ciclo do catálogo")
+  @DisplayName("Ciclo del catálogo")
   class Ciclo {
 
     @Test
-    @DisplayName("baleiro → crear → ler → actualizar → borrar → non atopado")
+    @DisplayName("vacío → crear → leer → actualizar → borrar → no encontrado")
     void vacioCrearLerActualizarBorrar() {
       InMemoryBookCatalog catalog = new InMemoryBookCatalog();
       BookServiceImpl service = catalog.service();

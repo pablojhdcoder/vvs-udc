@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Operacións de libros. A persistencia delégase en {@link BookRepository}. */
+/** Operaciones de libros. La persistencia se delega en {@link BookRepository}. */
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -70,7 +70,7 @@ public class BookServiceImpl implements BookService {
 
   @Override
   public Page<Book> findPaginated(Pageable pageable) {
-    long startTime = System.currentTimeMillis(); // 开始计时
+    long startTime = System.currentTimeMillis(); // inicio del cronometraje
 
     List<Book> allBooks = findAllBooks();
     int pageSize = pageable.getPageSize();
@@ -87,7 +87,7 @@ public class BookServiceImpl implements BookService {
 
     var bookPage = new PageImpl<>(list, PageRequest.of(currentPage, pageSize), allBooks.size());
 
-    long endTime = System.currentTimeMillis(); // 结束计时
+    long endTime = System.currentTimeMillis(); // fin del cronometraje
     System.out.println("Optimized method execution time: " + (endTime - startTime) + "ms");
 
     return bookPage;

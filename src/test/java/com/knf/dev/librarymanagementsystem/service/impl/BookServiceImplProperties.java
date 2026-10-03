@@ -25,7 +25,7 @@ import net.jqwik.api.constraints.StringLength;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-/** Datos aleatorios sobre BookServiceImpl. Un assert por propiedade. */
+/** Datos aleatorios sobre BookServiceImpl. Un assert por propiedad. */
 class BookServiceImplProperties {
 
   @Property(tries = 25)
@@ -127,7 +127,7 @@ class BookServiceImplProperties {
     try {
       service.deleteBook(id);
     } catch (NotFoundException ex) {
-      // a comprobación é que non se borra
+      // la comprobación es que no se borra
     }
 
     verify(repository, never()).deleteById(anyLong());

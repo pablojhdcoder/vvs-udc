@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Doble de {@link BookRepository} que garda libros en memoria. O catálogo cambia de estado ao
- * crear, actualizar e borrar, para encadear operacións sen arrancar Spring.
+ * Doble de {@link BookRepository} que guarda libros en memoria. El catálogo cambia de estado al
+ * crear, actualizar y borrar, para encadenar operaciones sin arrancar Spring.
  */
 public final class InMemoryBookCatalog {
 
@@ -24,7 +24,7 @@ public final class InMemoryBookCatalog {
   private final BookRepository repository;
   private final BookServiceImpl service;
 
-  /** Prepara o mock para que save, find e delete manteñan a lista en memoria. */
+  /** Prepara el mock para que save, find y delete mantengan la lista en memoria. */
   public InMemoryBookCatalog() {
     repository = mock(BookRepository.class);
     service = new BookServiceImpl(repository);

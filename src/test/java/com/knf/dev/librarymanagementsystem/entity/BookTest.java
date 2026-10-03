@@ -18,20 +18,20 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Diagrama de estados da relación (authors; categories e publishers son o mesmo grafo).
+ * Diagrama de estados de la relación (authors; categories y publishers son el mismo grafo).
  *
  * <pre>
- *   [Vacio] --add(novo)--> [ConElementos]
- *   [ConElementos] --add(o mesmo)--> [ConElementos]
- *   [ConElementos] --add(outro)--> [ConElementos]
- *   [ConElementos] --remove(o último)--> [Vacio]
- *   [ConElementos] --remove(un de varios)--> [ConElementos]
+ *   [Vacio] --add(nuevo)--> [ConElementos]
+ *   [ConElementos] --add(el mismo)--> [ConElementos]
+ *   [ConElementos] --add(otro)--> [ConElementos]
+ *   [ConElementos] --remove(el último)--> [Vacio]
+ *   [ConElementos] --remove(uno de varios)--> [ConElementos]
  *   [Vacio] --remove--> [Vacio]
- *   [Vacio] --set(non vacío)--> [ConElementos]
+ *   [Vacio] --set(no vacío)--> [ConElementos]
  *   [ConElementos] --set(vacío)--> [Vacio]
  * </pre>
  *
- * <p>Cada transición ten un escenario. Un assert por proba.
+ * <p>Cada transición tiene un escenario. Un assert por prueba.
  */
 class BookTest {
 
@@ -57,7 +57,7 @@ class BookTest {
   }
 
   @Nested
-  @DisplayName("Constructor baleiro")
+  @DisplayName("Constructor vacío")
   class ConstructorBaleiro {
 
     @Test
@@ -91,19 +91,19 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("authors empeza baleiro")
+    @DisplayName("authors empieza vacío")
     void authorsBaleiro() {
       assertTrue(new Book().getAuthors().isEmpty());
     }
 
     @Test
-    @DisplayName("categories empeza baleiro")
+    @DisplayName("categories empieza vacío")
     void categoriesBaleiro() {
       assertTrue(new Book().getCategories().isEmpty());
     }
 
     @Test
-    @DisplayName("publishers empeza baleiro")
+    @DisplayName("publishers empieza vacío")
     void publishersBaleiro() {
       assertTrue(new Book().getPublishers().isEmpty());
     }
@@ -114,44 +114,44 @@ class BookTest {
   class ConstructorConArgumentos {
 
     @Test
-    @DisplayName("garda o isbn típico")
+    @DisplayName("guarda el isbn típico")
     void gardaIsbn() {
       assertEquals(ISBN, libro().getIsbn());
     }
 
     @Test
-    @DisplayName("garda o nome")
+    @DisplayName("guarda el nombre")
     void gardaNome() {
       assertEquals(NAME, libro().getName());
     }
 
     @Test
-    @DisplayName("garda o serialName")
+    @DisplayName("guarda el serialName")
     void gardaSerial() {
       assertEquals(SERIAL, libro().getSerialName());
     }
 
     @Test
-    @DisplayName("garda a descrición")
+    @DisplayName("guarda la descripción")
     void gardaDescricion() {
       assertEquals(DESCRIPTION, libro().getDescription());
     }
 
     @Test
-    @DisplayName("o id segue null ata que o asigne a persistencia")
+    @DisplayName("el id sigue null hasta que lo asigne la persistencia")
     void idSegueNull() {
       assertNull(libro().getId());
     }
 
     @Test
-    @DisplayName("authors segue baleiro")
+    @DisplayName("authors sigue vacío")
     void authorsBaleiro() {
       assertTrue(libro().getAuthors().isEmpty());
     }
 
     @ParameterizedTest
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraIsbnSerial")
-    @DisplayName("isbn: valor curto, baleiro, lonxitude 50 e 51")
+    @DisplayName("isbn: valor corto, vacío, longitud 50 y 51")
     void isbnEnFronteira(String isbn) {
       Book book = new Book(isbn, NAME, SERIAL, DESCRIPTION);
 
@@ -160,7 +160,7 @@ class BookTest {
 
     @ParameterizedTest
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraNome")
-    @DisplayName("name: valor curto, baleiro, lonxitude 100 e 101")
+    @DisplayName("name: valor corto, vacío, longitud 100 y 101")
     void nomeEnFronteira(String name) {
       Book book = new Book(ISBN, name, SERIAL, DESCRIPTION);
 
@@ -169,7 +169,7 @@ class BookTest {
 
     @ParameterizedTest
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraIsbnSerial")
-    @DisplayName("serialName: valor curto, baleiro, lonxitude 50 e 51")
+    @DisplayName("serialName: valor corto, vacío, longitud 50 y 51")
     void serialEnFronteira(String serial) {
       Book book = new Book(ISBN, NAME, serial, DESCRIPTION);
 
@@ -178,7 +178,7 @@ class BookTest {
 
     @ParameterizedTest
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraDescricion")
-    @DisplayName("description: valor curto, baleiro, lonxitude 250 e 251")
+    @DisplayName("description: valor corto, vacío, longitud 250 y 251")
     void descricionEnFronteira(String description) {
       Book book = new Book(ISBN, NAME, SERIAL, description);
 
@@ -192,7 +192,7 @@ class BookTest {
 
     @ParameterizedTest
     @ValueSource(longs = {1L, 0L, Long.MAX_VALUE})
-    @DisplayName("setId conserva 1, 0 e o máximo long")
+    @DisplayName("setId conserva 1, 0 y el máximo long")
     void setId(long id) {
       Book book = new Book();
       book.setId(id);
@@ -213,7 +213,7 @@ class BookTest {
     @ParameterizedTest
     @NullSource
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraIsbnSerial")
-    @DisplayName("setIsbn: null, curto, baleiro, 50 e 51")
+    @DisplayName("setIsbn: null, corto, vacío, 50 y 51")
     void setIsbn(String isbn) {
       Book book = libro();
       book.setIsbn(isbn);
@@ -224,7 +224,7 @@ class BookTest {
     @ParameterizedTest
     @NullSource
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraNome")
-    @DisplayName("setName: null, curto, baleiro, 100 e 101")
+    @DisplayName("setName: null, corto, vacío, 100 y 101")
     void setName(String name) {
       Book book = libro();
       book.setName(name);
@@ -235,7 +235,7 @@ class BookTest {
     @ParameterizedTest
     @NullSource
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraIsbnSerial")
-    @DisplayName("setSerialName: null, curto, baleiro, 50 e 51")
+    @DisplayName("setSerialName: null, corto, vacío, 50 y 51")
     void setSerialName(String serial) {
       Book book = libro();
       book.setSerialName(serial);
@@ -246,7 +246,7 @@ class BookTest {
     @ParameterizedTest
     @NullSource
     @MethodSource("com.knf.dev.librarymanagementsystem.entity.BookTest#textosFronteiraDescricion")
-    @DisplayName("setDescription: null, curto, baleiro, 250 e 251")
+    @DisplayName("setDescription: null, corto, vacío, 250 y 251")
     void setDescription(String description) {
       Book book = libro();
       book.setDescription(description);
@@ -255,7 +255,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setAuthors substitúe a colección")
+    @DisplayName("setAuthors sustituye la colección")
     void setAuthorsSubstitue() {
       Book book = libro();
       Set<Author> autores = new HashSet<>();
@@ -267,7 +267,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setCategories substitúe a colección")
+    @DisplayName("setCategories sustituye la colección")
     void setCategoriesSubstitue() {
       Book book = libro();
       Set<Category> categorias = new HashSet<>();
@@ -279,7 +279,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setPublishers substitúe a colección")
+    @DisplayName("setPublishers sustituye la colección")
     void setPublishersSubstitue() {
       Book book = libro();
       Set<Publisher> editoriais = new HashSet<>();
@@ -292,11 +292,11 @@ class BookTest {
   }
 
   @Nested
-  @DisplayName("Autores: operacións e transicións")
+  @DisplayName("Autores: operaciones y transiciones")
   class Autores {
 
     @Test
-    @DisplayName("Vacio --add--> ConElementos no lado do libro")
+    @DisplayName("Vacio --add--> ConElementos en el lado del libro")
     void addPonElementoNoLibro() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -307,7 +307,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("Vacio --add--> ConElementos no lado do autor")
+    @DisplayName("Vacio --add--> ConElementos en el lado del autor")
     void addPonElementoNoAutor() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -318,7 +318,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add do mesmo autor non duplica no libro")
+    @DisplayName("add del mismo autor no duplica en el libro")
     void addRepetidoNonDuplicaNoLibro() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -330,7 +330,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add do mesmo autor non duplica no autor")
+    @DisplayName("add del mismo autor no duplica en el autor")
     void addRepetidoNonDuplicaNoAutor() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -342,7 +342,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add doutro autor deixa dous no libro")
+    @DisplayName("add de otro autor deja dos en el libro")
     void addDoutroAutor() {
       Book book = libro();
       book.addAuthors(new Author("Martin", "Uncle Bob"));
@@ -353,7 +353,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("ConElementos --remove(último)--> Vacio no libro")
+    @DisplayName("ConElementos --remove(último)--> Vacio en el libro")
     void removeUltimoDeixaLibroBaleiro() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -365,7 +365,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("ConElementos --remove(último)--> Vacio no autor")
+    @DisplayName("ConElementos --remove(último)--> Vacio en el autor")
     void removeUltimoDeixaAutorBaleiro() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -377,7 +377,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove dun de varios conserva o outro no libro")
+    @DisplayName("remove de uno de varios conserva el otro en el libro")
     void removeUnDeVariosConservaOutro() {
       Book book = libro();
       Author martin = new Author("Martin", "Uncle Bob");
@@ -391,7 +391,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove dun de varios quita o libro dese autor")
+    @DisplayName("remove de uno de varios quita el libro de ese autor")
     void removeUnDeVariosLimpaEseAutor() {
       Book book = libro();
       Author martin = new Author("Martin", "Uncle Bob");
@@ -405,7 +405,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("Vacio --remove--> Vacio no libro")
+    @DisplayName("Vacio --remove--> Vacio en el libro")
     void removeEnVacioDeixaLibroBaleiro() {
       Book book = libro();
 
@@ -415,7 +415,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("Vacio --set(non vacío)--> ConElementos")
+    @DisplayName("Vacio --set(no vacío)--> ConElementos")
     void setAuthorsEnche() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -440,11 +440,11 @@ class BookTest {
   }
 
   @Nested
-  @DisplayName("Categorías: operacións e transicións")
+  @DisplayName("Categorías: operaciones y transiciones")
   class Categorias {
 
     @Test
-    @DisplayName("Vacio --add--> ConElementos no lado do libro")
+    @DisplayName("Vacio --add--> ConElementos en el lado del libro")
     void addNoLibro() {
       Book book = libro();
       Category category = new Category("Software");
@@ -455,7 +455,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("Vacio --add--> ConElementos no lado da categoría")
+    @DisplayName("Vacio --add--> ConElementos en el lado de la categoría")
     void addNaCategoria() {
       Book book = libro();
       Category category = new Category("Software");
@@ -466,7 +466,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add da mesma categoría non duplica")
+    @DisplayName("add de la misma categoría no duplica")
     void addRepetido() {
       Book book = libro();
       Category category = new Category("Software");
@@ -478,7 +478,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add doutra categoría deixa dúas")
+    @DisplayName("add de otra categoría deja dos")
     void addOutra() {
       Book book = libro();
       book.addCategories(new Category("Software"));
@@ -489,7 +489,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add da mesma categoría non duplica no lado da categoría")
+    @DisplayName("add de la misma categoría no duplica en el lado de la categoría")
     void addRepetidoNonDuplicaNaCategoria() {
       Book book = libro();
       Category category = new Category("Software");
@@ -501,7 +501,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove dunha de varias conserva a outra no libro")
+    @DisplayName("remove de una de varias conserva la otra en el libro")
     void removeUnhaDeVariasConservaOutra() {
       Book book = libro();
       Category software = new Category("Software");
@@ -515,7 +515,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove dunha de varias quita o libro desa categoría")
+    @DisplayName("remove de una de varias quita el libro de esa categoría")
     void removeUnhaDeVariasLimpaEsaCategoria() {
       Book book = libro();
       Category software = new Category("Software");
@@ -529,7 +529,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove da última deixa o libro baleiro")
+    @DisplayName("remove de la última deja el libro vacío")
     void removeUltimaNoLibro() {
       Book book = libro();
       Category category = new Category("Software");
@@ -541,7 +541,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove da última deixa a categoría sen ese libro")
+    @DisplayName("remove de la última deja la categoría sin ese libro")
     void removeUltimaNaCategoria() {
       Book book = libro();
       Category category = new Category("Software");
@@ -553,7 +553,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove en baleiro segue baleiro")
+    @DisplayName("remove en vacío sigue vacío")
     void removeEnVacio() {
       Book book = libro();
 
@@ -563,7 +563,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setCategories non baleiro enche")
+    @DisplayName("setCategories no vacío llena")
     void setEnche() {
       Book book = libro();
       Category category = new Category("Software");
@@ -576,7 +576,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setCategories baleiro volta a Vacio")
+    @DisplayName("setCategories vacío vuelve a Vacio")
     void setBaleiro() {
       Book book = libro();
       book.addCategories(new Category("Software"));
@@ -588,11 +588,11 @@ class BookTest {
   }
 
   @Nested
-  @DisplayName("Editoriais: operacións e transicións")
+  @DisplayName("Editoriales: operaciones y transiciones")
   class Editoriais {
 
     @Test
-    @DisplayName("Vacio --add--> ConElementos no lado do libro")
+    @DisplayName("Vacio --add--> ConElementos en el lado del libro")
     void addNoLibro() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -603,7 +603,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("Vacio --add--> ConElementos no lado da editorial")
+    @DisplayName("Vacio --add--> ConElementos en el lado de la editorial")
     void addNaEditorial() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -614,7 +614,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add da mesma editorial non duplica")
+    @DisplayName("add de la misma editorial no duplica")
     void addRepetido() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -626,7 +626,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add doutra editorial deixa dúas")
+    @DisplayName("add de otra editorial deja dos")
     void addOutra() {
       Book book = libro();
       book.addPublishers(new Publisher("Prentice Hall"));
@@ -637,7 +637,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("add da mesma editorial non duplica no lado da editorial")
+    @DisplayName("add de la misma editorial no duplica en el lado de la editorial")
     void addRepetidoNonDuplicaNaEditorial() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -649,7 +649,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove dunha de varias conserva a outra no libro")
+    @DisplayName("remove de una de varias conserva la otra en el libro")
     void removeUnhaDeVariasConservaOutra() {
       Book book = libro();
       Publisher prentice = new Publisher("Prentice Hall");
@@ -663,7 +663,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove dunha de varias quita o libro desa editorial")
+    @DisplayName("remove de una de varias quita el libro de esa editorial")
     void removeUnhaDeVariasLimpaEsaEditorial() {
       Book book = libro();
       Publisher prentice = new Publisher("Prentice Hall");
@@ -677,7 +677,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove da última deixa o libro baleiro")
+    @DisplayName("remove de la última deja el libro vacío")
     void removeUltimaNoLibro() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -689,7 +689,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove da última deixa a editorial sen ese libro")
+    @DisplayName("remove de la última deja la editorial sin ese libro")
     void removeUltimaNaEditorial() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -701,7 +701,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("remove en baleiro segue baleiro")
+    @DisplayName("remove en vacío sigue vacío")
     void removeEnVacio() {
       Book book = libro();
 
@@ -711,7 +711,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setPublishers non baleiro enche")
+    @DisplayName("setPublishers no vacío llena")
     void setEnche() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -724,7 +724,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setPublishers baleiro volta a Vacio")
+    @DisplayName("setPublishers vacío vuelve a Vacio")
     void setBaleiro() {
       Book book = libro();
       book.addPublishers(new Publisher("Prentice Hall"));
@@ -736,11 +736,11 @@ class BookTest {
   }
 
   @Nested
-  @DisplayName("SpotBugs EI_EXPOSE_REP: o getter devolve a colección interna")
+  @DisplayName("SpotBugs EI_EXPOSE_REP: el getter devuelve la colección interna")
   class ExposeRep {
 
     @Test
-    @DisplayName("getAuthors: mutar o set devolto cambia o libro")
+    @DisplayName("getAuthors: mutar el set devuelto cambia el libro")
     void getAuthors() {
       Book book = libro();
       Author author = new Author("Martin", "Uncle Bob");
@@ -751,7 +751,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("getCategories: mutar o set devolto cambia o libro")
+    @DisplayName("getCategories: mutar el set devuelto cambia el libro")
     void getCategories() {
       Book book = libro();
       Category category = new Category("Software");
@@ -762,7 +762,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("getPublishers: mutar o set devolto cambia o libro")
+    @DisplayName("getPublishers: mutar el set devuelto cambia el libro")
     void getPublishers() {
       Book book = libro();
       Publisher publisher = new Publisher("Prentice Hall");
@@ -774,11 +774,11 @@ class BookTest {
   }
 
   @Nested
-  @DisplayName("SpotBugs EI_EXPOSE_REP2: o setter garda o set que lle pasan")
+  @DisplayName("SpotBugs EI_EXPOSE_REP2: el setter guarda el set que le pasan")
   class ExposeRep2 {
 
     @Test
-    @DisplayName("setAuthors: mutar o set orixinal cambia o libro")
+    @DisplayName("setAuthors: mutar el set original cambia el libro")
     void setAuthors() {
       Book book = libro();
       Set<Author> autores = new HashSet<>();
@@ -790,7 +790,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setCategories: mutar o set orixinal cambia o libro")
+    @DisplayName("setCategories: mutar el set original cambia el libro")
     void setCategories() {
       Book book = libro();
       Set<Category> categorias = new HashSet<>();
@@ -802,7 +802,7 @@ class BookTest {
     }
 
     @Test
-    @DisplayName("setPublishers: mutar o set orixinal cambia o libro")
+    @DisplayName("setPublishers: mutar el set original cambia el libro")
     void setPublishers() {
       Book book = libro();
       Set<Publisher> editoriais = new HashSet<>();

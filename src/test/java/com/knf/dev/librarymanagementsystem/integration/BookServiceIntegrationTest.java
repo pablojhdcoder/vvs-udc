@@ -17,7 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Integración BookService + BookRepository (H2). Os mocks da proba de unidade desaparecen.
+ * Integración BookService + BookRepository (H2). Los mocks de la prueba de unidad desaparecen.
  *
  * <pre>
  *   [Ausente] --createBook--> [Presente]
@@ -41,7 +41,7 @@ class BookServiceIntegrationTest {
   }
 
   private Book libro(String isbn, String name) {
-    return new Book(isbn, name, "SER-1", "descricion");
+    return new Book(isbn, name, "SER-1", "descripcion");
   }
 
   private Book crearDespoisLer(Book book) {
@@ -50,7 +50,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("Ausente --create--> Presente: findById devolve o isbn")
+  @DisplayName("Ausente --create--> Presente: findById devuelve el isbn")
   void createDespoisAtopase() {
     Book gardado = crearDespoisLer(libro("ISBN-1", "Clean Code"));
 
@@ -58,7 +58,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("Ausente --create--> Presente: findAll ten un libro")
+  @DisplayName("Ausente --create--> Presente: findAll tiene un libro")
   void createApareceEnFindAll() {
     bookService.createBook(libro("ISBN-2", "Refactoring"));
 
@@ -66,7 +66,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("dous creates dejan dous libros")
+  @DisplayName("dos creates dejan dos libros")
   void dousCreates() {
     bookService.createBook(libro("ISBN-3A", "Un"));
     bookService.createBook(libro("ISBN-3B", "Dous"));
@@ -75,7 +75,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("Presente --update--> Presente: o nome novo persiste")
+  @DisplayName("Presente --update--> Presente: el nombre nuevo persiste")
   void updateCambiaNome() {
     Book gardado = crearDespoisLer(libro("ISBN-4", "Vello"));
     gardado.setName("Novo");
@@ -86,7 +86,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("Presente --update--> Presente: o isbn novo persiste")
+  @DisplayName("Presente --update--> Presente: el isbn nuevo persiste")
   void updateCambiaIsbn() {
     Book gardado = crearDespoisLer(libro("ISBN-5", "Clean Code"));
     gardado.setIsbn("ISBN-5B");
@@ -120,13 +120,13 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("search null co catálogo baleiro devolve lista baleira")
+  @DisplayName("search null con el catálogo vacío devuelve lista vacía")
   void searchNullBaleiro() {
     assertTrue(bookService.searchBooks(null).isEmpty());
   }
 
   @Test
-  @DisplayName("search null devolve os libros creados")
+  @DisplayName("search null devuelve los libros creados")
   void searchNullDevolveTodos() {
     bookService.createBook(libro("ISBN-7", "Clean Code"));
 
@@ -134,7 +134,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("search por nome atopa o libro")
+  @DisplayName("search por nombre encuentra el libro")
   void searchPorNome() {
     bookService.createBook(libro("ISBN-8", "Clean Code"));
     bookService.createBook(libro("ISBN-9", "Outro"));
@@ -143,7 +143,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("search por isbn atopa o libro")
+  @DisplayName("search por isbn encuentra el libro")
   void searchPorIsbn() {
     bookService.createBook(libro("ISBN-BUSCA", "Clean Code"));
 
@@ -151,7 +151,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("search sen coincidencias devolve baleiro")
+  @DisplayName("search sin coincidencias devuelve vacío")
   void searchSenCoincidencias() {
     bookService.createBook(libro("ISBN-10", "Clean Code"));
 
@@ -159,7 +159,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("páxina 0 tamaño 2 con 5 libros devolve 2")
+  @DisplayName("página 0 tamaño 2 con 5 libros devuelve 2")
   void primeiraPaxina() {
     for (int i = 0; i < 5; i++) {
       bookService.createBook(libro("PAG-" + i, "Libro " + i));
@@ -169,7 +169,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("fronteira: páxina xusto despois do último elemento queda baleira")
+  @DisplayName("frontera: la página justo después del último elemento queda vacía")
   void paxinaNaFronteira() {
     bookService.createBook(libro("FR-1", "Un"));
     bookService.createBook(libro("FR-2", "Dous"));
@@ -178,7 +178,7 @@ class BookServiceIntegrationTest {
   }
 
   @Test
-  @DisplayName("con 5 libros e tamaño 2 o total segue sendo 5")
+  @DisplayName("con 5 libros y tamaño 2 el total sigue siendo 5")
   void totalDaPaxinacion() {
     for (int i = 0; i < 5; i++) {
       bookService.createBook(libro("TOT-" + i, "Libro " + i));

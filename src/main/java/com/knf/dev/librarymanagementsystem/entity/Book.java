@@ -14,7 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-/** Libro do catálogo e as súas relacións con autores, categorías e editoriais. */
+/** Libro del catálogo y sus relaciones con autores, categorías y editoriales. */
 @Entity
 @Table(name = "books")
 public class Book {
@@ -62,7 +62,7 @@ public class Book {
       inverseJoinColumns = {@JoinColumn(name = "publisher_id")})
   private Set<Publisher> publishers = new HashSet<Publisher>();
 
-  /** Crea un libro cos catro campos obrigatorios. O id queda null. */
+  /** Crea un libro con los cuatro campos obligatorios. El id queda null. */
   public Book(String isbn, String name, String serialName, String description) {
     this.isbn = isbn;
     this.name = name;
