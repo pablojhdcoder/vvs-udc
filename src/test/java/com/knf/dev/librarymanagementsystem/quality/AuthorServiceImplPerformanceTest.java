@@ -25,9 +25,15 @@ class AuthorServiceImplPerformanceTest {
 
 	@Test
 	void measureFindPaginatedWithGrowingLists() {
-		BasicEtmConfigurator.configure();
+		try {
+			BasicEtmConfigurator.configure();
+		} catch (IllegalStateException alreadyConfigured) {
+			// la prueba de integración puede haber arrancado JETM en la misma JVM
+		}
 		EtmMonitor monitor = EtmManager.getEtmMonitor();
-		monitor.start();
+		if (!monitor.isStarted()) {
+			monitor.start();
+		}
 		try {
 			measure(monitor, "findPaginated.n=100", 100, 50);
 			measure(monitor, "findPaginated.n=5000", 5000, 20);
