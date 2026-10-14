@@ -229,13 +229,20 @@
 					<targetClasses>
 						<param>com.knf.dev.librarymanagementsystem.entity.Author</param>
 						<param>com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImpl</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.Book</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.BookServiceImpl</param>
 					</targetClasses>
 					<targetTests>
 						<param>com.knf.dev.librarymanagementsystem.entity.AuthorTest*</param>
 						<param>com.knf.dev.librarymanagementsystem.entity.AuthorProperties</param>
 						<param>com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImplTest*</param>
 						<param>com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImplProperties</param>
-						<param>com.knf.dev.librarymanagementsystem.quality.*</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.BookTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.BookProperties</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.BookServiceImplTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.BookServiceImplProperties</param>
+						<param>com.knf.dev.librarymanagementsystem.quality.AuthorArchitectureTest</param>
+						<param>com.knf.dev.librarymanagementsystem.quality.BookArchitectureTest</param>
 					</targetTests>
 					<outputFormats>
 						<param>HTML</param>
@@ -255,7 +262,7 @@
 					<failsOnError>false</failsOnError>
 					<failOnViolation>false</failOnViolation>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/quality/BookArchitectureTest.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/integration/BookServiceIntegrationProperties.java,**/integration/BookRelationIntegrationTest.java,**/integration/BookRelationIntegrationProperties.java,**/support/InMemoryBookCatalog.java</includes>
+					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/quality/BookArchitectureTest.java,**/quality/BookServiceImplPerformanceTest.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/integration/BookServiceIntegrationProperties.java,**/integration/BookRelationIntegrationTest.java,**/integration/BookRelationIntegrationProperties.java,**/support/InMemoryBookCatalog.java</includes>
 				</configuration>
 				<executions>
 					<execution>

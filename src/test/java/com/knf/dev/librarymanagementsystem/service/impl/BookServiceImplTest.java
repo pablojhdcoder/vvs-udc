@@ -14,6 +14,8 @@ import com.knf.dev.librarymanagementsystem.entity.Book;
 import com.knf.dev.librarymanagementsystem.exception.NotFoundException;
 import com.knf.dev.librarymanagementsystem.repository.BookRepository;
 import com.knf.dev.librarymanagementsystem.support.InMemoryBookCatalog;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -391,6 +393,23 @@ class BookServiceImplTest {
       Page<Book> pagina = bookService.findPaginated(PageRequest.of(0, 10));
 
       assertEquals(todos, pagina.getContent());
+    }
+
+    @Test
+    @DisplayName("imprime el tiempo de ejecución en milisegundos")
+    void imprimeTiempoDeEjecucion() {
+      when(bookRepository.findAll()).thenReturn(cincoLibros());
+      ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+      PrintStream original = System.out;
+      System.setOut(new PrintStream(buffer));
+      try {
+        bookService.findPaginated(PageRequest.of(0, 2));
+      } finally {
+        System.setOut(original);
+      }
+
+      assertTrue(
+          buffer.toString().matches("(?s).*Optimized method execution time: \\d{1,6}ms.*"));
     }
   }
 
