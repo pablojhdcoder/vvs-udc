@@ -3,10 +3,14 @@ package com.knf.dev.librarymanagementsystem.service.impl;
 import com.knf.dev.librarymanagementsystem.entity.Category;
 import com.knf.dev.librarymanagementsystem.exception.NotFoundException;
 import com.knf.dev.librarymanagementsystem.repository.CategoryRepository;
+import net.jqwik.api.ForAll;
+import net.jqwik.api.Property;
+import net.jqwik.api.constraints.LongRange;
+import net.jqwik.api.constraints.StringLength;
+import net.jqwik.spring.JqwikSpringSupport;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -25,6 +29,7 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
+@JqwikSpringSupport
 public class CategoryServiceImplTest {
     @Mock
     CategoryRepository categoryRepository;
@@ -147,18 +152,18 @@ public class CategoryServiceImplTest {
     }
 
 
-    //USAR JQWIK
-    @Test
-    void testUpdateCategory() {
-        Category category1 = new Category("Category1");
-        category1.setId(1L);
+    @Property(tries = 20)
+    void testUpdateCategory(
+            @ForAll @LongRange(min = 1, max = 10_000) long id,
+            @ForAll @StringLength(min = 1, max = 50) String name) {
+        CategoryRepository repository = mock(CategoryRepository.class);
+        CategoryServiceImpl service = new CategoryServiceImpl(repository);
+        Category category = new Category(name);
+        category.setId(id);
 
-        categoryService.updateCategory(category1);
+        service.updateCategory(category);
 
-        assertAll(
-                "Comprobar que se guarda correctamente la categoría con ID 1 al actualizarla",
-                () -> verify(categoryRepository).save(category1)
-        );
+        verify(repository).save(category);
     }
 
 
@@ -196,8 +201,6 @@ public class CategoryServiceImplTest {
         verify(categoryRepository, never()).deleteById(2L);
     }
 }
-
-
 
 
 
