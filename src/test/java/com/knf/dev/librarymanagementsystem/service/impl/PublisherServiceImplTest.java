@@ -1,169 +1,223 @@
 package com.knf.dev.librarymanagementsystem.service.impl;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.knf.dev.librarymanagementsystem.entity.Publisher;
 import com.knf.dev.librarymanagementsystem.exception.NotFoundException;
 import com.knf.dev.librarymanagementsystem.repository.PublisherRepository;
 
+
+@ExtendWith(MockitoExtension.class)
 class PublisherServiceImplTest {
 
-    private PublisherRepository publisherRepository;
-	private PublisherServiceImpl publisherService;
+  @Mock
+  PublisherRepository publisherRepository;
 
-    @BeforeEach
-	void setUp() {
-		publisherRepository = mock(PublisherRepository.class);
-		publisherService = new PublisherServiceImpl(publisherRepository);
-	}
+  @InjectMocks
+  PublisherServiceImpl publisherService;
 
-    private Publisher editorial(long id, String nombre) {
-		Publisher publisher = new Publisher(nombre);
-		publisher.setId(id);
-		return publisher;
-    }
-    
-    @Nested
-	@DisplayName("Lectura")
+  private Publisher publisher(long id, String name) {
+    Publisher publisher = new Publisher(name);
+    publisher.setId(id);
+    return publisher;
+  }
 
-	class Lectura {
 
-		@Test
-		@DisplayName("findAllPublishers delega en repository.findAll")
-		void findAllPublishersDevuelveLoDelRepositorio() {
-			List<Publisher> editoriales = List.of(editorial(1L, "Prentice Hall"), editorial(2L, "Pearson"));
-			when(publisherRepository.findAll()).thenReturn(editoriales);
+  @Test
+  void testFindAllPublishersWithNoPublishers() {
+    List<Publisher> emptyPublishers = new ArrayList<>();
+    when(publisherRepository.findAll()).thenReturn(emptyPublishers);
 
-			List<Publisher> resultado = publisherService.findAllPublishers();
+    List<Publisher> result = publisherService.findAllPublishers();
 
-			assertEquals(editoriales, resultado);
-			verify(publisherRepository).findAll();
-		}
+    assertAll(
+        "Comprobar que se obtiene una lista vacía cuando no existen editoriales",
+        () -> assertTrue(result.isEmpty()),
+        () -> verify(publisherRepository).findAll()
+    );
+  }
 
-		@Test
-		@DisplayName("findAllPublishers devuelve lista vacía si no hay editoriales")
-		void findAllPublishersVacio() {
-			when(publisherRepository.findAll()).thenReturn(List.of());
+  @Test
+  void testFindAllPublishersWithOnePublisher() {
+    List<Publisher> publishers = List.of(publisher(1L, "Pearson"));
+    when(publisherRepository.findAll()).thenReturn(publishers);
 
-			assertTrue(publisherService.findAllPublishers().isEmpty());
-		}
-	}
+    List<Publisher> result = publisherService.findAllPublishers();
 
-	@Nested
-	@DisplayName("findById y delete: existe / no encontrado")
-	class PorId {
+    assertAll(
+        "Comprobar que se obtiene correctamente una editorial",
+        () -> assertEquals(publishers, result),
+        () -> verify(publisherRepository).findAll()
+    );
+  }
 
-		@Test
-		@DisplayName("findPublisherById devuelve la editorial si el repositorio la tiene")
-		void findPublisherByIdExistente() {
-			Publisher publisher = editorial(1L, "Prentice Hall");
-			when(publisherRepository.findById(1L)).thenReturn(Optional.of(publisher));
+  @Test
+  void testFindAllPublishersWithTwoPublishers() {
+    List<Publisher> publishers = List.of(publisher(1L, "Pearson"), publisher(2L, "Anaya"));
+    when(publisherRepository.findAll()).thenReturn(publishers);
 
-			assertEquals(publisher, publisherService.findPublisherById(1L));
-		}
+    List<Publisher> result = publisherService.findAllPublishers();
 
-		@Test
-		@DisplayName("findPublisherById lanza NotFoundException si el Optional está vacío")
-		void findPublisherByIdInexistente() {
-			when(publisherRepository.findById(99L)).thenReturn(Optional.empty());
+    assertAll(
+        "Comprobar que se obtienen correctamente dos editoriales y en el mismo orden",
+        () -> assertEquals(publishers, result),
+        () -> verify(publisherRepository).findAll()
+    );
+  }
 
-			NotFoundException ex = assertThrows(NotFoundException.class,
-					() -> publisherService.findPublisherById(99L));
-			assertEquals("Publisher not found  with ID 99", ex.getMessage());
-		}
 
-		@Test
-		@DisplayName("deletePublisher busca y borra por el id de la editorial encontrada")
-		void deletePublisherExistente() {
-			Publisher publisher = editorial(1L, "Prentice Hall");
-			when(publisherRepository.findById(1L)).thenReturn(Optional.of(publisher));
+  @Test
+  void testFindPublisherById() {
+    Publisher publisher = publisher(1L, "Pearson");
+    when(publisherRepository.findById(1L)).thenReturn(Optional.of(publisher));
 
-			publisherService.deletePublisher(1L);
+    Publisher result = publisherService.findPublisherById(1L);
 
-			verify(publisherRepository).findById(1L);
-			verify(publisherRepository).deleteById(1L);
-		}
+    assertAll(
+        "Comprobar que se encuentra correctamente la editorial con ID 1",
+        () -> assertEquals(publisher, result),
+        () -> verify(publisherRepository).findById(1L)
+    );
+  }
 
-		@Test
-		@DisplayName("deletePublisher lanza NotFoundException y no llama a deleteById")
-		void deletePublisherInexistente() {
-			when(publisherRepository.findById(99L)).thenReturn(Optional.empty());
+  @Test
+  void testFindPublisherByIdWhenPublisherDoesNotExist() {
+    when(publisherRepository.findById(3L)).thenReturn(Optional.empty());
 
-			assertThrows(NotFoundException.class, () -> publisherService.deletePublisher(99L));
-			verify(publisherRepository, never()).deleteById(anyLong());
-		}
-	}
+    assertAll(
+        "Comprobar que se lanza NotFoundException cuando no existe la editorial con ID 3",
+        () -> assertThrows(NotFoundException.class, () -> publisherService.findPublisherById(3L))
+    );
+  }
 
-	@Nested
-	@DisplayName("Escritura")
-	class Escritura {
+  @Test
+  void testFindPublisherByIdNotFoundMessage() {
+    when(publisherRepository.findById(3L)).thenReturn(Optional.empty());
 
-		@Test
-		@DisplayName("createPublisher guarda la editorial")
-		void createPublisher() {
-			Publisher publisher = editorial(1L, "Prentice Hall");
+    assertAll(
+        "Comprobar que el mensaje de NotFoundException incluye el ID buscado",
+        () -> assertEquals("Publisher not found  with ID 3",
+            assertThrows(NotFoundException.class, () -> publisherService.findPublisherById(3L))
+                .getMessage())
+    );
+  }
 
-			publisherService.createPublisher(publisher);
 
-			verify(publisherRepository).save(publisher);
-		}
+  @Test
+  void testCreatePublisher() {
+    Publisher publisher = new Publisher("Pearson");
 
-		@Test
-		@DisplayName("updatePublisher también guarda la editorial")
-		void updatePublisher() {
-			Publisher publisher = editorial(1L, "Prentice Hall");
-			publisher.setName("Pearson");
+    publisherService.createPublisher(publisher);
 
-			publisherService.updatePublisher(publisher);
+    assertAll(
+        "Comprobar que se guarda correctamente una editorial",
+        () -> verify(publisherRepository).save(publisher)
+    );
+  }
 
-			verify(publisherRepository).save(publisher);
-		}
-	}
+  @Test
+  void testCreatePublisherWithNull() {
+    publisherService.createPublisher(null);
 
-	@Nested
-	@DisplayName("Ciclo completo")
-	class CicloCompleto {
+    assertAll(
+        "Comprobar que el servicio no valida y pasa el null tal cual al repositorio",
+        () -> verify(publisherRepository).save(null)
+    );
+  }
 
-		@Test
-		@DisplayName("vacío → crear → leer → actualizar → borrar → no encontrado")
-		void cicloDeVida() {
-			Publisher publisher = editorial(1L, "Prentice Hall");
-			when(publisherRepository.findAll()).thenReturn(List.of(), List.of(publisher));
-			when(publisherRepository.findById(1L))
-					.thenReturn(Optional.of(publisher), Optional.of(publisher), Optional.empty());
 
-			assertTrue(publisherService.findAllPublishers().isEmpty());
+  @Test
+  void testUpdatePublisher() {
+    Publisher publisher = publisher(1L, "Pearson");
+    publisher.setName("Anaya");
 
-			publisherService.createPublisher(publisher);
-			verify(publisherRepository).save(publisher);
-			assertEquals(List.of(publisher), publisherService.findAllPublishers());
+    publisherService.updatePublisher(publisher);
 
-			assertEquals("Prentice Hall", publisherService.findPublisherById(1L).getName());
+    assertAll(
+        "Comprobar que se guarda correctamente la editorial con ID 1 al actualizarla",
+        () -> verify(publisherRepository).save(publisher)
+    );
+  }
 
-			publisher.setName("Pearson");
-			publisherService.updatePublisher(publisher);
-			verify(publisherRepository, times(2)).save(publisher);
+  @Test
+  void testUpdatePublisherWithNull() {
+    publisherService.updatePublisher(null);
 
-			publisherService.deletePublisher(1L);
-			verify(publisherRepository).deleteById(1L);
+    assertAll(
+        "Comprobar que actualizar con null también se delega sin validar en el repositorio",
+        () -> verify(publisherRepository).save(null)
+    );
+  }
 
-			assertThrows(NotFoundException.class, () -> publisherService.findPublisherById(1L));
-		}
-	}
+  // ---------- deletePublisher ----------
+
+  @Test
+  void testDeletePublisher() {
+    Publisher publisher = publisher(1L, "Pearson");
+    when(publisherRepository.findById(1L)).thenReturn(Optional.of(publisher));
+
+    publisherService.deletePublisher(1L);
+
+    assertAll(
+        "Comprobar que se busca y elimina correctamente una editorial existente",
+        () -> verify(publisherRepository).findById(1L),
+        () -> verify(publisherRepository).deleteById(1L)
+    );
+  }
+
+  @Test
+  void testDeletePublisherWhenPublisherDoesNotExist() {
+    when(publisherRepository.findById(2L)).thenReturn(Optional.empty());
+
+    assertAll(
+        "Comprobar que se lanza NotFoundException al eliminar una editorial inexistente y no se borra nada",
+        () -> assertThrows(NotFoundException.class, () -> publisherService.deletePublisher(2L)),
+        () -> verify(publisherRepository, never()).deleteById(anyLong())
+    );
+  }
+
+
+  @Test
+  void testPublisherLifecycle() {
+    Publisher publisher = publisher(1L, "Pearson");
+    when(publisherRepository.findAll()).thenReturn(List.of(), List.of(publisher));
+    when(publisherRepository.findById(1L))
+        .thenReturn(Optional.of(publisher), Optional.of(publisher), Optional.empty());
+
+    List<Publisher> alPrincipio = publisherService.findAllPublishers();
+    publisherService.createPublisher(publisher);
+    List<Publisher> trasCrear = publisherService.findAllPublishers();
+    String nombreLeido = publisherService.findPublisherById(1L).getName();
+    publisher.setName("Anaya");
+    publisherService.updatePublisher(publisher);
+    publisherService.deletePublisher(1L);
+
+    assertAll(
+        "Comprobar el ciclo vacío → crear → leer → actualizar → borrar → no encontrado",
+        () -> assertTrue(alPrincipio.isEmpty()),
+        () -> assertEquals(List.of(publisher), trasCrear),
+        () -> assertEquals("Pearson", nombreLeido),
+        () -> verify(publisherRepository, times(2)).save(publisher),
+        () -> verify(publisherRepository).deleteById(1L),
+        () -> assertThrows(NotFoundException.class, () -> publisherService.findPublisherById(1L))
+    );
+  }
 }

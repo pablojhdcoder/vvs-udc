@@ -1,71 +1,266 @@
 package com.knf.dev.librarymanagementsystem.entity;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
 
 class PublisherTest {
-    @Nested
-	@DisplayName("Constructores")
-    class Constructores {
 
-        @Test
-		@DisplayName("el constructor vacío deja id y name a null y books vacío")
-		void constructorVacio() {
-			Publisher publisher = new Publisher();
+  private final Book book1 = new Book("111", "Book1", "SerialBook1", "Description");
+  private final Book book2 = new Book("222", "Book2", "SerialBook2", "Description");
+  private final Book book3 = new Book("333", "Book3", "SerialBook3", "Description");
 
-			assertNull(publisher.getId());
-			assertNull(publisher.getName());
-			assertTrue(publisher.getBooks().isEmpty());
-		}
+  static Stream<String> nombresFrontera() {
+    return Stream.of("", "a", "a".repeat(99), "a".repeat(100), "a".repeat(101));
+  }
 
-        @Test
-		@DisplayName("el constructor con nombre rellena name y deja id a null")
-		void constructorConNombre() {
-			Publisher publisher = new Publisher("Prentice Hall");
 
-			assertEquals("Prentice Hall", publisher.getName());
-			assertNull(publisher.getId());
-			assertTrue(publisher.getBooks().isEmpty());
-		}
-    }
+  @Test
+  void shouldCreateEmptyPublisher() {
+    Publisher publisher = new Publisher();
 
-    @Nested
-	@DisplayName("Getters y setters")
-    class Accesores {
+    assertAll(
+        "Comprobar que el constructor vacío deja id y name a null y books vacío",
+        () -> assertNull(publisher.getId()),
+        () -> assertNull(publisher.getName()),
+        () -> assertNotNull(publisher.getBooks()),
+        () -> assertTrue(publisher.getBooks().isEmpty())
+    );
+  }
 
-        @Test
-		@DisplayName("setId y setName actualizan los campos")
-		void settersSimples() {
-			Publisher publisher = new Publisher();
+  @Test
+  void shouldCreatePublisherWithName() {
+    Publisher publisher = new Publisher("Pearson");
 
-			publisher.setId(3L);
-			publisher.setName("Pearson");
+    assertAll(
+        "Comprobar que el constructor con nombre guarda el name, deja id a null y books vacío",
+        () -> assertEquals("Pearson", publisher.getName()),
+        () -> assertNull(publisher.getId()),
+        () -> assertNotNull(publisher.getBooks()),
+        () -> assertTrue(publisher.getBooks().isEmpty())
+    );
+  }
 
-			assertEquals(3L, publisher.getId());
-			assertEquals("Pearson", publisher.getName());
-		}
+  @ParameterizedTest
+  @MethodSource("nombresFrontera")
+  void shouldCreatePublisherWithBoundaryName(String name) {
+    Publisher publisher = new Publisher(name);
 
-        @Test
-		@DisplayName("setBooks sustituye el set de libros")
-		void setBooksSustituyeElSet() {
-			Publisher publisher = new Publisher("Pearson");
-			Set<Book> libros = new HashSet<>();
-			Book book = new Book("978-1", "Clean Code", "CC-1", "desc");
-			libros.add(book);
+    assertAll(
+        "Comprobar que el constructor guarda nombres en la frontera de longitud (0, 1, 99, 100, 101)",
+        () -> assertEquals(name, publisher.getName())
+    );
+  }
 
-			publisher.setBooks(libros);
+  @Test
+  void shouldCreatePublisherWithNullName() {
+    Publisher publisher = new Publisher(null);
 
-			assertSame(libros, publisher.getBooks());
-			assertTrue(publisher.getBooks().contains(book));
-		}
+    assertAll(
+        "Comprobar que el constructor acepta un nombre null",
+        () -> assertNull(publisher.getName())
+    );
+  }
 
-    }
+  @Test
+  void shouldNotShareBooksBetweenPublishers() {
+    Publisher publisher1 = new Publisher("Pearson");
+    Publisher publisher2 = new Publisher("Anaya");
+
+    assertAll(
+        "Comprobar que cada editorial tiene su propio conjunto de libros",
+        () -> assertNotSame(publisher1.getBooks(), publisher2.getBooks())
+    );
+  }
+
+
+  @ParameterizedTest
+  @ValueSource(longs = { Long.MIN_VALUE, -1L, 0L, 1L, Long.MAX_VALUE })
+  void shouldSetAndGetId(long id) {
+    Publisher publisher = new Publisher("Pearson");
+
+    publisher.setId(id);
+
+    assertAll(
+        "Comprobar que se puede establecer y obtener el ID en sus fronteras",
+        () -> assertEquals(id, publisher.getId())
+    );
+  }
+
+  @Test
+  void shouldSetIdToNull() {
+    Publisher publisher = new Publisher("Pearson");
+    publisher.setId(5L);
+
+    publisher.setId(null);
+
+    assertAll(
+        "Comprobar que se puede volver a poner el ID a null",
+        () -> assertNull(publisher.getId())
+    );
+  }
+
+
+  @ParameterizedTest
+  @MethodSource("nombresFrontera")
+  void shouldSetAndGetBoundaryName(String name) {
+    Publisher publisher = new Publisher();
+
+    publisher.setName(name);
+
+    assertAll(
+        "Comprobar que setName guarda nombres en la frontera de longitud (0, 1, 99, 100, 101)",
+        () -> assertEquals(name, publisher.getName())
+    );
+  }
+
+  @Test
+  void shouldChangeName() {
+    Publisher publisher = new Publisher("Pearson");
+
+    publisher.setName("Anaya");
+
+    assertAll(
+        "Comprobar que setName sustituye el nombre anterior",
+        () -> assertEquals("Anaya", publisher.getName())
+    );
+  }
+
+  @Test
+  void shouldSetNameToNull() {
+    Publisher publisher = new Publisher("Pearson");
+
+    publisher.setName(null);
+
+    assertAll(
+        "Comprobar que se puede poner el nombre a null",
+        () -> assertNull(publisher.getName())
+    );
+  }
+
+
+  @Test
+  void shouldSetAndGetEmptyBooks() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>();
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que se puede establecer y obtener un conjunto de libros vacío",
+        () -> assertEquals(books, publisher.getBooks()),
+        () -> assertTrue(publisher.getBooks().isEmpty())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetOneBook() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>(Set.of(book1));
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que una editorial puede contener exactamente un libro",
+        () -> assertEquals(books, publisher.getBooks()),
+        () -> assertEquals(1, publisher.getBooks().size())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetTwoBooks() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>(Set.of(book1, book2));
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que una editorial puede contener exactamente dos libros",
+        () -> assertEquals(books, publisher.getBooks()),
+        () -> assertEquals(2, publisher.getBooks().size())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetThreeBooks() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>(Set.of(book1, book2, book3));
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que una editorial puede contener exactamente tres libros",
+        () -> assertEquals(books, publisher.getBooks()),
+        () -> assertEquals(3, publisher.getBooks().size())
+    );
+  }
+
+  @Test
+  void shouldNotStoreSameBookTwice() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>();
+    books.add(book1);
+    books.add(book1);
+    books.add(book1);
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que no se almacena varias veces la misma instancia de un libro",
+        () -> assertEquals(1, publisher.getBooks().size())
+    );
+  }
+
+  @Test
+  void shouldKeepSameSetInstance() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>(Set.of(book1));
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que setBooks guarda la misma instancia del conjunto, sin copiarla",
+        () -> assertSame(books, publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldReplacePreviousBooks() {
+    Publisher publisher = new Publisher("Pearson");
+    publisher.setBooks(new HashSet<>(Set.of(book1)));
+    Set<Book> newBooks = new HashSet<>(Set.of(book2, book3));
+
+    publisher.setBooks(newBooks);
+
+    assertAll(
+        "Comprobar que setBooks sustituye el conjunto anterior",
+        () -> assertEquals(newBooks, publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldSetBooksToNull() {
+    Publisher publisher = new Publisher("Pearson");
+
+    publisher.setBooks(null);
+
+    assertAll(
+        "Comprobar que se puede poner el conjunto de libros a null",
+        () -> assertNull(publisher.getBooks())
+    );
+  }
 }

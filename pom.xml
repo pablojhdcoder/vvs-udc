@@ -231,6 +231,12 @@
 						<param>com.knf.dev.librarymanagementsystem.service.impl.AuthorServiceImpl</param>
 						<param>com.knf.dev.librarymanagementsystem.entity.Book</param>
 						<param>com.knf.dev.librarymanagementsystem.service.impl.BookServiceImpl</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.Publisher</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.PublisherServiceImpl</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.User</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.Role</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.UserServiceImpl</param>
+						<param>com.knf.dev.librarymanagementsystem.util.Mapper</param>
 					</targetClasses>
 					<targetTests>
 						<param>com.knf.dev.librarymanagementsystem.entity.AuthorTest*</param>
@@ -243,6 +249,19 @@
 						<param>com.knf.dev.librarymanagementsystem.service.impl.BookServiceImplProperties</param>
 						<param>com.knf.dev.librarymanagementsystem.quality.AuthorArchitectureTest</param>
 						<param>com.knf.dev.librarymanagementsystem.quality.BookArchitectureTest</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.PublisherTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.PublisherProperties</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.PublisherServiceImplTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.PublisherServiceImplProperties</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.UserTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.entity.RoleTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.UserServiceImplTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.service.impl.UserServiceImplProperties</param>
+						<param>com.knf.dev.librarymanagementsystem.util.MapperTest*</param>
+						<param>com.knf.dev.librarymanagementsystem.util.MapperProperties</param>
+						<param>com.knf.dev.librarymanagementsystem.quality.PublisherArchitectureTest</param>
+						<param>com.knf.dev.librarymanagementsystem.quality.UserArchitectureTest</param>
+						<param>com.knf.dev.librarymanagementsystem.quality.MapperArchitectureTest</param>
 					</targetTests>
 					<outputFormats>
 						<param>HTML</param>
@@ -262,7 +281,7 @@
 					<failsOnError>false</failsOnError>
 					<failOnViolation>false</failOnViolation>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/quality/BookArchitectureTest.java,**/quality/BookServiceImplPerformanceTest.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/integration/BookServiceIntegrationProperties.java,**/integration/BookRelationIntegrationTest.java,**/integration/BookRelationIntegrationProperties.java,**/integration/BookServiceIntegrationPerformanceTest.java,**/integration/AuthorServiceIntegrationTest.java,**/integration/AuthorServiceIntegrationProperties.java,**/integration/AuthorServiceIntegrationPerformanceTest.java,**/support/InMemoryBookCatalog.java</includes>
+					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/quality/BookArchitectureTest.java,**/quality/BookServiceImplPerformanceTest.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/integration/BookServiceIntegrationProperties.java,**/integration/BookRelationIntegrationTest.java,**/integration/BookRelationIntegrationProperties.java,**/integration/BookServiceIntegrationPerformanceTest.java,**/integration/AuthorServiceIntegrationTest.java,**/integration/AuthorServiceIntegrationProperties.java,**/integration/AuthorServiceIntegrationPerformanceTest.java,**/support/InMemoryBookCatalog.java,**/entity/Publisher*.java,**/entity/User*.java,**/entity/Role*.java,**/service/impl/PublisherServiceImpl*.java,**/service/impl/UserServiceImpl*.java,**/util/Mapper*.java,**/integration/PublisherServiceIntegration*.java,**/integration/UserServiceIntegration*.java,**/quality/Publisher*.java,**/quality/User*.java,**/quality/Mapper*.java,**/support/InMemoryPublisherCatalog.java</includes>
 				</configuration>
 				<executions>
 					<execution>

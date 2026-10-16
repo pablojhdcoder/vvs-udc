@@ -12,4 +12,19 @@
 	<Match>
 		<Class name="com.knf.dev.librarymanagementsystem.service.impl.BookServiceImpl"/>
 	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.entity.Publisher"/>
+	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.service.impl.PublisherServiceImpl"/>
+	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.entity.User"/>
+	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.service.impl.UserServiceImpl"/>
+	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.util.Mapper"/>
+	</Match>
 </FindBugsFilter>
