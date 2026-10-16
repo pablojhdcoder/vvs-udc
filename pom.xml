@@ -281,11 +281,11 @@
 					<failsOnError>false</failsOnError>
 					<failOnViolation>false</failOnViolation>
 					<includeTestSourceDirectory>true</includeTestSourceDirectory>
-					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/quality/BookArchitectureTest.java,**/quality/BookServiceImplPerformanceTest.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/integration/BookServiceIntegrationProperties.java,**/integration/BookRelationIntegrationTest.java,**/integration/BookRelationIntegrationProperties.java,**/integration/BookServiceIntegrationPerformanceTest.java,**/integration/AuthorServiceIntegrationTest.java,**/integration/AuthorServiceIntegrationProperties.java,**/integration/AuthorServiceIntegrationPerformanceTest.java,**/support/InMemoryBookCatalog.java,**/entity/Publisher*.java,**/entity/User*.java,**/entity/Role*.java,**/service/impl/PublisherServiceImpl*.java,**/service/impl/UserServiceImpl*.java,**/util/Mapper*.java,**/integration/PublisherServiceIntegration*.java,**/integration/UserServiceIntegration*.java,**/quality/Publisher*.java,**/quality/User*.java,**/quality/Mapper*.java,**/support/InMemoryPublisherCatalog.java</includes>
+					<includes>**/entity/Author.java,**/service/impl/AuthorServiceImpl.java,**/entity/Author*.java,**/service/impl/AuthorServiceImpl*.java,**/quality/Author*.java,**/quality/BookArchitectureTest.java,**/quality/BookServiceImplPerformanceTest.java,**/support/InMemoryAuthorCatalog.java,**/entity/Book.java,**/service/impl/BookServiceImpl.java,**/entity/BookTest.java,**/service/impl/BookServiceImplTest.java,**/service/impl/BookServiceImplProperties.java,**/entity/BookProperties.java,**/integration/BookServiceIntegrationTest.java,**/integration/BookServiceIntegrationProperties.java,**/integration/BookRelationIntegrationTest.java,**/integration/BookRelationIntegrationProperties.java,**/integration/BookServiceIntegrationPerformanceTest.java,**/integration/AuthorServiceIntegrationTest.java,**/integration/AuthorServiceIntegrationProperties.java,**/integration/AuthorServiceIntegrationPerformanceTest.java,**/support/InMemoryBookCatalog.java,**/entity/Publisher*.java,**/entity/User*.java,**/entity/Role*.java,**/service/impl/PublisherServiceImpl*.java,**/service/impl/UserServiceImpl*.java,**/util/Mapper*.java,**/integration/PublisherServiceIntegration*.java,**/integration/UserServiceIntegration*.java,**/quality/Publisher*.java,**/quality/User*.java,**/quality/Mapper*.java,**/support/InMemoryPublisherCatalog.java,**/entity/Category*.java,**/service/Category*.java,**/service/impl/CategoryServiceImpl*.java,**/repository/Category*.java,**/controller/Category*.java,**/integration/Category*.java,**/quality/Category*.java</includes>
 				</configuration>
 				<executions>
 					<execution>
-						<id>checkstyle-author</id>
+						<id>checkstyle-selected-classes</id>
 						<phase>test</phase>
 						<goals>
 							<goal>checkstyle</goal>
@@ -299,13 +299,13 @@
 				<version>${spotbugs.plugin.version}</version>
 				<configuration>
 					<failOnError>false</failOnError>
-					<includeFilterFile>${project.basedir}/spotbugs-author-include.xml</includeFilterFile>
+					<includeFilterFile>${project.basedir}/spotbugs-include.xml</includeFilterFile>
 					<effort>Max</effort>
 					<xmlOutput>true</xmlOutput>
 				</configuration>
 				<executions>
 					<execution>
-						<id>spotbugs-author</id>
+						<id>spotbugs-selected-classes</id>
 						<phase>test</phase>
 						<goals>
 							<goal>spotbugs</goal>

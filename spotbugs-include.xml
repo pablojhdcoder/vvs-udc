@@ -22,6 +22,12 @@
 		<Class name="com.knf.dev.librarymanagementsystem.entity.User"/>
 	</Match>
 	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.entity.Category"/>
+	</Match>
+	<Match>
+		<Class name="com.knf.dev.librarymanagementsystem.service.impl.CategoryServiceImpl"/>
+	</Match>
+	<Match>
 		<Class name="com.knf.dev.librarymanagementsystem.service.impl.UserServiceImpl"/>
 	</Match>
 	<Match>
