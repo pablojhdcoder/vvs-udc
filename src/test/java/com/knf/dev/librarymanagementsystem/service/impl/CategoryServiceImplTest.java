@@ -38,7 +38,7 @@ public class CategoryServiceImplTest {
     CategoryServiceImpl categoryService;
 
     @Test
-    void testFindAllCategoriesWithTwoCategories() {
+    void testFindAllCategoriesWithTwoCategories_equals() {
         Category category1 = new Category("Category1");
         Category category2 = new Category("Category2");
         List<Category> categories = List.of(category1, category2);
@@ -51,12 +51,22 @@ public class CategoryServiceImplTest {
                 "Comprobar que se obtienen correctamente dos categorías",
                 () -> assertEquals(categories, result)
         );
-
-        verify(categoryRepository).findAll();
     }
 
     @Test
-    void testFindAllCategoriesWithOneCategory() {
+    void testFindAllCategoriesWithTwoCategories_callsFindAll() {
+        when(categoryRepository.findAll()).thenReturn(List.of());
+
+        categoryService.findAllCategories();
+
+        assertAll(
+                "Comprobar que se delega en findAll del repositorio",
+                () -> verify(categoryRepository).findAll()
+        );
+    }
+
+    @Test
+    void testFindAllCategoriesWithOneCategory_equals() {
         Category category3 = new Category("Category2");
         List<Category> categories2 = List.of(category3);
 
@@ -68,12 +78,22 @@ public class CategoryServiceImplTest {
                 "Comprobar que se obtiene correctamente una categoría",
                 () -> assertEquals(categories2, result2)
         );
-
-        verify(categoryRepository).findAll();
     }
 
     @Test
-    void testFindAllCategoriesWithNoCategories() {
+    void testFindAllCategoriesWithOneCategory_callsFindAll() {
+        when(categoryRepository.findAll()).thenReturn(List.of(new Category("Category2")));
+
+        categoryService.findAllCategories();
+
+        assertAll(
+                "Comprobar que con una categoría se llama a findAll",
+                () -> verify(categoryRepository).findAll()
+        );
+    }
+
+    @Test
+    void testFindAllCategoriesWithNoCategories_equals() {
         List<Category> emptyCategories = new ArrayList<Category>();
 
         when(categoryRepository.findAll()).thenReturn(emptyCategories);
@@ -84,13 +104,23 @@ public class CategoryServiceImplTest {
                 "Comprobar que se obtiene una lista vacía cuando no existen categorías",
                 () -> assertEquals(emptyCategories, emptyResult)
         );
+    }
 
-        verify(categoryRepository).findAll();
+    @Test
+    void testFindAllCategoriesWithNoCategories_callsFindAll() {
+        when(categoryRepository.findAll()).thenReturn(new ArrayList<Category>());
+
+        categoryService.findAllCategories();
+
+        assertAll(
+                "Comprobar que con catálogo vacío se llama a findAll",
+                () -> verify(categoryRepository).findAll()
+        );
     }
 
 
     @Test
-    void testFindCategoryById() {
+    void testFindCategoryById_equals() {
         Category category1 = new Category("Category1");
 
         when(categoryRepository.findById(1L))
@@ -102,12 +132,25 @@ public class CategoryServiceImplTest {
                 "Comprobar que se encuentra correctamente la categoría con ID 1",
                 () -> assertEquals(category1, result)
         );
-
-        verify(categoryRepository).findById(1L);
     }
 
     @Test
-    void testFindCategoryByIdWhenCategoryDoesNotExist() {
+    void testFindCategoryById_callsFindById() {
+        Category category1 = new Category("Category1");
+
+        when(categoryRepository.findById(1L))
+                .thenReturn(Optional.of(category1));
+
+        categoryService.findCategoryById(1L);
+
+        assertAll(
+                "Comprobar que se busca por ID en el repositorio",
+                () -> verify(categoryRepository).findById(1L)
+        );
+    }
+
+    @Test
+    void testFindCategoryByIdWhenCategoryDoesNotExist_throws() {
         when(categoryRepository.findById(3L))
                 .thenReturn(Optional.empty());
 
@@ -118,8 +161,23 @@ public class CategoryServiceImplTest {
                         () -> categoryService.findCategoryById(3L)
                 )
         );
+    }
 
-        verify(categoryRepository).findById(3L);
+    @Test
+    void testFindCategoryByIdWhenCategoryDoesNotExist_callsFindById() {
+        when(categoryRepository.findById(3L))
+                .thenReturn(Optional.empty());
+
+        try {
+            categoryService.findCategoryById(3L);
+        } catch (NotFoundException ignored) {
+            // esperado
+        }
+
+        assertAll(
+                "Comprobar que ante ID inexistente se consulta el repositorio",
+                () -> verify(categoryRepository).findById(3L)
+        );
     }
 
 
@@ -168,7 +226,7 @@ public class CategoryServiceImplTest {
 
 
     @Test
-    void testDeleteCategory() {
+    void testDeleteCategory_findsById() {
         Category category = new Category("Category");
         category.setId(1L);
 
@@ -178,14 +236,29 @@ public class CategoryServiceImplTest {
         categoryService.deleteCategory(1L);
 
         assertAll(
-                "Comprobar que se busca y elimina correctamente una categoría existente",
-                () -> verify(categoryRepository).findById(1L),
+                "Comprobar que al eliminar se busca la categoría por ID",
+                () -> verify(categoryRepository).findById(1L)
+        );
+    }
+
+    @Test
+    void testDeleteCategory_deletesById() {
+        Category category = new Category("Category");
+        category.setId(1L);
+
+        when(categoryRepository.findById(1L))
+                .thenReturn(Optional.of(category));
+
+        categoryService.deleteCategory(1L);
+
+        assertAll(
+                "Comprobar que al eliminar se llama a deleteById con el ID",
                 () -> verify(categoryRepository).deleteById(1L)
         );
     }
 
     @Test
-    void testDeleteCategoryWhenCategoryDoesNotExist() {
+    void testDeleteCategoryWhenCategoryDoesNotExist_throws() {
         when(categoryRepository.findById(2L))
                 .thenReturn(Optional.empty());
 
@@ -196,11 +269,39 @@ public class CategoryServiceImplTest {
                         () -> categoryService.deleteCategory(2L)
                 )
         );
+    }
 
-        verify(categoryRepository).findById(2L);
-        verify(categoryRepository, never()).deleteById(2L);
+    @Test
+    void testDeleteCategoryWhenCategoryDoesNotExist_callsFindById() {
+        when(categoryRepository.findById(2L))
+                .thenReturn(Optional.empty());
+
+        try {
+            categoryService.deleteCategory(2L);
+        } catch (NotFoundException ignored) {
+            // esperado
+        }
+
+        assertAll(
+                "Comprobar que ante borrado inexistente se consulta el repositorio",
+                () -> verify(categoryRepository).findById(2L)
+        );
+    }
+
+    @Test
+    void testDeleteCategoryWhenCategoryDoesNotExist_neverDeletes() {
+        when(categoryRepository.findById(2L))
+                .thenReturn(Optional.empty());
+
+        try {
+            categoryService.deleteCategory(2L);
+        } catch (NotFoundException ignored) {
+            // esperado
+        }
+
+        assertAll(
+                "Comprobar que no se llama a deleteById si la categoría no existe",
+                () -> verify(categoryRepository, never()).deleteById(2L)
+        );
     }
 }
-
-
-
