@@ -140,11 +140,16 @@ class UserServiceImplTest {
   void testLoadUserByUsernameNotFoundMessage() {
     when(userRepository.findByEmail("nadie@test.com")).thenReturn(null);
 
+    final String[] mensaje = { null };
+    try {
+      userService.loadUserByUsername("nadie@test.com");
+    } catch (UsernameNotFoundException ex) {
+      mensaje[0] = ex.getMessage();
+    }
+
     assertAll(
         "Comprobar que el mensaje no revela si falla el usuario o la contraseña",
-        () -> assertEquals("Invalid username or password.",
-            assertThrows(UsernameNotFoundException.class,
-                () -> userService.loadUserByUsername("nadie@test.com")).getMessage())
+        () -> assertEquals("Invalid username or password.", mensaje[0])
     );
   }
 
