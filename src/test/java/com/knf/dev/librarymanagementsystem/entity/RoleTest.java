@@ -19,23 +19,41 @@ class RoleTest {
   }
 
   @Test
-  void shouldCreateEmptyRole() {
+  void shouldCreateEmptyRole_idNull() {
     Role role = new Role();
 
     assertAll(
-        "Comprobar que el constructor vacío deja id y name a null",
-        () -> assertNull(role.getId()),
+        "Comprobar que el constructor vacío deja id a null",
+        () -> assertNull(role.getId())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyRole_nameNull() {
+    Role role = new Role();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja name a null",
         () -> assertNull(role.getName())
     );
   }
 
   @Test
-  void shouldCreateRoleWithName() {
+  void shouldCreateRoleWithName_guardaName() {
     Role role = new Role("ROLE_ADMIN");
 
     assertAll(
-        "Comprobar que el constructor con nombre guarda el name y deja el id a null",
-        () -> assertEquals("ROLE_ADMIN", role.getName()),
+        "Comprobar que el constructor con nombre guarda el name",
+        () -> assertEquals("ROLE_ADMIN", role.getName())
+    );
+  }
+
+  @Test
+  void shouldCreateRoleWithName_idNull() {
+    Role role = new Role("ROLE_ADMIN");
+
+    assertAll(
+        "Comprobar que el constructor con nombre deja el id a null",
         () -> assertNull(role.getId())
     );
   }

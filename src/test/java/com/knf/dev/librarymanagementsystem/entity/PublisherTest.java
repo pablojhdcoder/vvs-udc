@@ -30,27 +30,81 @@ class PublisherTest {
 
 
   @Test
-  void shouldCreateEmptyPublisher() {
+  void shouldCreateEmptyPublisher_idNull() {
     Publisher publisher = new Publisher();
 
     assertAll(
-        "Comprobar que el constructor vacío deja id y name a null y books vacío",
-        () -> assertNull(publisher.getId()),
-        () -> assertNull(publisher.getName()),
-        () -> assertNotNull(publisher.getBooks()),
+        "Comprobar que el constructor vacío deja el id a null",
+        () -> assertNull(publisher.getId())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyPublisher_nameNull() {
+    Publisher publisher = new Publisher();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja el name a null",
+        () -> assertNull(publisher.getName())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyPublisher_booksNotNull() {
+    Publisher publisher = new Publisher();
+
+    assertAll(
+        "Comprobar que el constructor vacío inicializa books",
+        () -> assertNotNull(publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyPublisher_booksEmpty() {
+    Publisher publisher = new Publisher();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja books vacío",
         () -> assertTrue(publisher.getBooks().isEmpty())
     );
   }
 
   @Test
-  void shouldCreatePublisherWithName() {
+  void shouldCreatePublisherWithName_nameStored() {
     Publisher publisher = new Publisher("Pearson");
 
     assertAll(
-        "Comprobar que el constructor con nombre guarda el name, deja id a null y books vacío",
-        () -> assertEquals("Pearson", publisher.getName()),
-        () -> assertNull(publisher.getId()),
-        () -> assertNotNull(publisher.getBooks()),
+        "Comprobar que el constructor con nombre guarda el name",
+        () -> assertEquals("Pearson", publisher.getName())
+    );
+  }
+
+  @Test
+  void shouldCreatePublisherWithName_idNull() {
+    Publisher publisher = new Publisher("Pearson");
+
+    assertAll(
+        "Comprobar que el constructor con nombre deja el id a null",
+        () -> assertNull(publisher.getId())
+    );
+  }
+
+  @Test
+  void shouldCreatePublisherWithName_booksNotNull() {
+    Publisher publisher = new Publisher("Pearson");
+
+    assertAll(
+        "Comprobar que el constructor con nombre inicializa books",
+        () -> assertNotNull(publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldCreatePublisherWithName_booksEmpty() {
+    Publisher publisher = new Publisher("Pearson");
+
+    assertAll(
+        "Comprobar que el constructor con nombre deja books vacío",
         () -> assertTrue(publisher.getBooks().isEmpty())
     );
   }
@@ -154,7 +208,7 @@ class PublisherTest {
 
 
   @Test
-  void shouldSetAndGetEmptyBooks() {
+  void shouldSetAndGetEmptyBooks_equalsSet() {
     Publisher publisher = new Publisher("Pearson");
     Set<Book> books = new HashSet<>();
 
@@ -162,13 +216,38 @@ class PublisherTest {
 
     assertAll(
         "Comprobar que se puede establecer y obtener un conjunto de libros vacío",
-        () -> assertEquals(books, publisher.getBooks()),
+        () -> assertEquals(books, publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetEmptyBooks_isEmpty() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>();
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que el conjunto de libros establecido vacío permanece vacío",
         () -> assertTrue(publisher.getBooks().isEmpty())
     );
   }
 
   @Test
-  void shouldSetAndGetOneBook() {
+  void shouldSetAndGetOneBook_equalsSet() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>(Set.of(book1));
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que una editorial guarda el conjunto con un libro",
+        () -> assertEquals(books, publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetOneBook_size() {
     Publisher publisher = new Publisher("Pearson");
     Set<Book> books = new HashSet<>(Set.of(book1));
 
@@ -176,13 +255,25 @@ class PublisherTest {
 
     assertAll(
         "Comprobar que una editorial puede contener exactamente un libro",
-        () -> assertEquals(books, publisher.getBooks()),
         () -> assertEquals(1, publisher.getBooks().size())
     );
   }
 
   @Test
-  void shouldSetAndGetTwoBooks() {
+  void shouldSetAndGetTwoBooks_equalsSet() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>(Set.of(book1, book2));
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que una editorial guarda el conjunto con dos libros",
+        () -> assertEquals(books, publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetTwoBooks_size() {
     Publisher publisher = new Publisher("Pearson");
     Set<Book> books = new HashSet<>(Set.of(book1, book2));
 
@@ -190,13 +281,25 @@ class PublisherTest {
 
     assertAll(
         "Comprobar que una editorial puede contener exactamente dos libros",
-        () -> assertEquals(books, publisher.getBooks()),
         () -> assertEquals(2, publisher.getBooks().size())
     );
   }
 
   @Test
-  void shouldSetAndGetThreeBooks() {
+  void shouldSetAndGetThreeBooks_equalsSet() {
+    Publisher publisher = new Publisher("Pearson");
+    Set<Book> books = new HashSet<>(Set.of(book1, book2, book3));
+
+    publisher.setBooks(books);
+
+    assertAll(
+        "Comprobar que una editorial guarda el conjunto con tres libros",
+        () -> assertEquals(books, publisher.getBooks())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetThreeBooks_size() {
     Publisher publisher = new Publisher("Pearson");
     Set<Book> books = new HashSet<>(Set.of(book1, book2, book3));
 
@@ -204,7 +307,6 @@ class PublisherTest {
 
     assertAll(
         "Comprobar que una editorial puede contener exactamente tres libros",
-        () -> assertEquals(books, publisher.getBooks()),
         () -> assertEquals(3, publisher.getBooks().size())
     );
   }

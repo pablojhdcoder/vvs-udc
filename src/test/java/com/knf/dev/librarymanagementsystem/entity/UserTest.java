@@ -30,31 +30,116 @@ class UserTest {
   }
 
   @Test
-  void shouldCreateEmptyUser() {
+  void shouldCreateEmptyUser_idNull() {
     User user = new User();
 
     assertAll(
-        "Comprobar que el constructor vacío deja todos los campos a null, incluida la colección de roles",
-        () -> assertNull(user.getId()),
-        () -> assertNull(user.getFirstName()),
-        () -> assertNull(user.getLastName()),
-        () -> assertNull(user.getEmail()),
-        () -> assertNull(user.getPassword()),
+        "Comprobar que el constructor vacío deja el ID a null",
+        () -> assertNull(user.getId())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyUser_firstNameNull() {
+    User user = new User();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja el nombre a null",
+        () -> assertNull(user.getFirstName())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyUser_lastNameNull() {
+    User user = new User();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja el apellido a null",
+        () -> assertNull(user.getLastName())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyUser_emailNull() {
+    User user = new User();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja el email a null",
+        () -> assertNull(user.getEmail())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyUser_passwordNull() {
+    User user = new User();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja el password a null",
+        () -> assertNull(user.getPassword())
+    );
+  }
+
+  @Test
+  void shouldCreateEmptyUser_rolesNull() {
+    User user = new User();
+
+    assertAll(
+        "Comprobar que el constructor vacío deja la colección de roles a null",
         () -> assertNull(user.getRoles())
     );
   }
 
   @Test
-  void shouldCreateUserWithAllFields() {
+  void shouldCreateUserWithAllFields_firstName() {
     List<Role> roles = new ArrayList<>(List.of(roleUser));
     User user = new User("Samu", "Test", "samu@test.com", "hash123", roles);
 
     assertAll(
-        "Comprobar que el constructor completo guarda nombre, apellido, email, password y roles",
-        () -> assertEquals("Samu", user.getFirstName()),
-        () -> assertEquals("Test", user.getLastName()),
-        () -> assertEquals("samu@test.com", user.getEmail()),
-        () -> assertEquals("hash123", user.getPassword()),
+        "Comprobar que el constructor completo guarda el nombre",
+        () -> assertEquals("Samu", user.getFirstName())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithAllFields_lastName() {
+    List<Role> roles = new ArrayList<>(List.of(roleUser));
+    User user = new User("Samu", "Test", "samu@test.com", "hash123", roles);
+
+    assertAll(
+        "Comprobar que el constructor completo guarda el apellido",
+        () -> assertEquals("Test", user.getLastName())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithAllFields_email() {
+    List<Role> roles = new ArrayList<>(List.of(roleUser));
+    User user = new User("Samu", "Test", "samu@test.com", "hash123", roles);
+
+    assertAll(
+        "Comprobar que el constructor completo guarda el email",
+        () -> assertEquals("samu@test.com", user.getEmail())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithAllFields_password() {
+    List<Role> roles = new ArrayList<>(List.of(roleUser));
+    User user = new User("Samu", "Test", "samu@test.com", "hash123", roles);
+
+    assertAll(
+        "Comprobar que el constructor completo guarda el password",
+        () -> assertEquals("hash123", user.getPassword())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithAllFields_roles() {
+    List<Role> roles = new ArrayList<>(List.of(roleUser));
+    User user = new User("Samu", "Test", "samu@test.com", "hash123", roles);
+
+    assertAll(
+        "Comprobar que el constructor completo guarda la misma instancia de roles",
         () -> assertSame(roles, user.getRoles())
     );
   }
@@ -70,15 +155,51 @@ class UserTest {
   }
 
   @Test
-  void shouldCreateUserWithNullFields() {
+  void shouldCreateUserWithNullFields_firstName() {
     User user = new User(null, null, null, null, null);
 
     assertAll(
-        "Comprobar que el constructor completo acepta todos los campos a null",
-        () -> assertNull(user.getFirstName()),
-        () -> assertNull(user.getLastName()),
-        () -> assertNull(user.getEmail()),
-        () -> assertNull(user.getPassword()),
+        "Comprobar que el constructor completo acepta firstName null",
+        () -> assertNull(user.getFirstName())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithNullFields_lastName() {
+    User user = new User(null, null, null, null, null);
+
+    assertAll(
+        "Comprobar que el constructor completo acepta lastName null",
+        () -> assertNull(user.getLastName())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithNullFields_email() {
+    User user = new User(null, null, null, null, null);
+
+    assertAll(
+        "Comprobar que el constructor completo acepta email null",
+        () -> assertNull(user.getEmail())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithNullFields_password() {
+    User user = new User(null, null, null, null, null);
+
+    assertAll(
+        "Comprobar que el constructor completo acepta password null",
+        () -> assertNull(user.getPassword())
+    );
+  }
+
+  @Test
+  void shouldCreateUserWithNullFields_roles() {
+    User user = new User(null, null, null, null, null);
+
+    assertAll(
+        "Comprobar que el constructor completo acepta roles null",
         () -> assertNull(user.getRoles())
     );
   }
@@ -222,7 +343,7 @@ class UserTest {
   }
 
   @Test
-  void shouldSetAndGetEmptyRoles() {
+  void shouldSetAndGetEmptyRoles_equals() {
     User user = usuario();
     List<Role> roles = new ArrayList<>();
 
@@ -230,13 +351,38 @@ class UserTest {
 
     assertAll(
         "Comprobar que se puede establecer y obtener una colección de roles vacía",
-        () -> assertEquals(roles, user.getRoles()),
+        () -> assertEquals(roles, user.getRoles())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetEmptyRoles_isEmpty() {
+    User user = usuario();
+    List<Role> roles = new ArrayList<>();
+
+    user.setRoles(roles);
+
+    assertAll(
+        "Comprobar que la colección de roles establecida está vacía",
         () -> assertTrue(user.getRoles().isEmpty())
     );
   }
 
   @Test
-  void shouldSetAndGetOneRole() {
+  void shouldSetAndGetOneRole_equals() {
+    User user = usuario();
+    List<Role> roles = new ArrayList<>(List.of(roleUser));
+
+    user.setRoles(roles);
+
+    assertAll(
+        "Comprobar que se establece y obtiene la colección con un rol",
+        () -> assertEquals(roles, user.getRoles())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetOneRole_size() {
     User user = usuario();
     List<Role> roles = new ArrayList<>(List.of(roleUser));
 
@@ -244,13 +390,25 @@ class UserTest {
 
     assertAll(
         "Comprobar que un usuario puede tener exactamente un rol",
-        () -> assertEquals(roles, user.getRoles()),
         () -> assertEquals(1, user.getRoles().size())
     );
   }
 
   @Test
-  void shouldSetAndGetTwoRoles() {
+  void shouldSetAndGetTwoRoles_equals() {
+    User user = usuario();
+    List<Role> roles = new ArrayList<>(List.of(roleUser, roleAdmin));
+
+    user.setRoles(roles);
+
+    assertAll(
+        "Comprobar que se establece y obtiene la colección con dos roles",
+        () -> assertEquals(roles, user.getRoles())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetTwoRoles_size() {
     User user = usuario();
     List<Role> roles = new ArrayList<>(List.of(roleUser, roleAdmin));
 
@@ -258,13 +416,25 @@ class UserTest {
 
     assertAll(
         "Comprobar que un usuario puede tener exactamente dos roles",
-        () -> assertEquals(roles, user.getRoles()),
         () -> assertEquals(2, user.getRoles().size())
     );
   }
 
   @Test
-  void shouldSetAndGetThreeRoles() {
+  void shouldSetAndGetThreeRoles_equals() {
+    User user = usuario();
+    List<Role> roles = new ArrayList<>(List.of(roleUser, roleAdmin, roleGuest));
+
+    user.setRoles(roles);
+
+    assertAll(
+        "Comprobar que se establece y obtiene la colección con tres roles",
+        () -> assertEquals(roles, user.getRoles())
+    );
+  }
+
+  @Test
+  void shouldSetAndGetThreeRoles_size() {
     User user = usuario();
     List<Role> roles = new ArrayList<>(List.of(roleUser, roleAdmin, roleGuest));
 
@@ -272,7 +442,6 @@ class UserTest {
 
     assertAll(
         "Comprobar que un usuario puede tener exactamente tres roles",
-        () -> assertEquals(roles, user.getRoles()),
         () -> assertEquals(3, user.getRoles().size())
     );
   }
