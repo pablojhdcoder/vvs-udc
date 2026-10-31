@@ -1,6 +1,5 @@
 package com.knf.dev.librarymanagementsystem.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -193,25 +192,52 @@ class BookServiceImplProperties {
   }
 
   @Property(tries = 15)
-  void cicloVacioCrearLerActualizarBorrar(
+  void trasCrearFindByIdDevuelveElNombre(
       @ForAll @StringLength(min = 1, max = 20) String isbn,
       @ForAll @StringLength(min = 1, max = 40) String name) {
-    InMemoryBookCatalog catalog = new InMemoryBookCatalog();
-    BookServiceImpl service = catalog.service();
+    BookServiceImpl service = new InMemoryBookCatalog().service();
     Book book = new Book(isbn, name, "serial", "desc");
+    service.createBook(book);
 
-    assertAll(
-        () -> assertTrue(service.findAllBooks().isEmpty()),
-        () -> service.createBook(book),
-        () -> assertEquals(name, service.findBookById(book.getId()).getName()),
-        () -> {
-          book.setName(name + "-upd");
-          service.updateBook(book);
-        },
-        () -> assertEquals(name + "-upd", service.findBookById(book.getId()).getName()),
-        () -> service.deleteBook(book.getId()),
-        () -> assertTrue(service.findAllBooks().isEmpty()),
-        () -> assertThrows(NotFoundException.class, () -> service.findBookById(book.getId())));
+    assertEquals(name, service.findBookById(book.getId()).getName());
+  }
+
+  @Property(tries = 15)
+  void trasActualizarElNombreEsElNuevo(
+      @ForAll @StringLength(min = 1, max = 20) String isbn,
+      @ForAll @StringLength(min = 1, max = 40) String name) {
+    BookServiceImpl service = new InMemoryBookCatalog().service();
+    Book book = new Book(isbn, name, "serial", "desc");
+    service.createBook(book);
+    book.setName(name + "-upd");
+    service.updateBook(book);
+
+    assertEquals(name + "-upd", service.findBookById(book.getId()).getName());
+  }
+
+  @Property(tries = 15)
+  void trasBorrarFindAllEstaVacio(
+      @ForAll @StringLength(min = 1, max = 20) String isbn,
+      @ForAll @StringLength(min = 1, max = 40) String name) {
+    BookServiceImpl service = new InMemoryBookCatalog().service();
+    Book book = new Book(isbn, name, "serial", "desc");
+    service.createBook(book);
+    service.deleteBook(book.getId());
+
+    assertTrue(service.findAllBooks().isEmpty());
+  }
+
+  @Property(tries = 15)
+  void trasBorrarFindByIdLanza(
+      @ForAll @StringLength(min = 1, max = 20) String isbn,
+      @ForAll @StringLength(min = 1, max = 40) String name) {
+    BookServiceImpl service = new InMemoryBookCatalog().service();
+    Book book = new Book(isbn, name, "serial", "desc");
+    service.createBook(book);
+    Long id = book.getId();
+    service.deleteBook(id);
+
+    assertThrows(NotFoundException.class, () -> service.findBookById(id));
   }
 
   private BookServiceImpl serviceCon(List<Book> libros) {

@@ -1,6 +1,5 @@
 package com.knf.dev.librarymanagementsystem.service.impl;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,7 +26,7 @@ import org.springframework.data.domain.PageRequest;
 
 /**
  * BookServiceImpl no guarda estado: el historial vive en el repositorio. Cada método comprueba una
- * cosa. El ciclo del catálogo usa un mock con memoria y agrupa las comprobaciones en assertAll.
+ * cosa. El ciclo del catálogo usa un mock con memoria; un assert por método.
  */
 class BookServiceImplTest {
 
@@ -418,24 +417,58 @@ class BookServiceImplTest {
   class Ciclo {
 
     @Test
-    @DisplayName("vacío → crear → leer → actualizar → borrar → no encontrado")
-    void vacioCrearLerActualizarBorrar() {
+    @DisplayName("al empezar el catálogo está vacío")
+    void empiezaVacio() {
+      assertTrue(new InMemoryBookCatalog().service().findAllBooks().isEmpty());
+    }
+
+    @Test
+    @DisplayName("tras crear se lee el nombre")
+    void trasCrearSeLeeElNombre() {
       InMemoryBookCatalog catalog = new InMemoryBookCatalog();
       BookServiceImpl service = catalog.service();
       Book book = new Book("978-1", "Clean Code", "CC-1", "desc");
+      service.createBook(book);
 
-      assertAll(
-          () -> assertTrue(service.findAllBooks().isEmpty()),
-          () -> service.createBook(book),
-          () -> assertEquals("Clean Code", service.findBookById(book.getId()).getName()),
-          () -> {
-            book.setName("Refactoring");
-            service.updateBook(book);
-          },
-          () -> assertEquals("Refactoring", service.findBookById(book.getId()).getName()),
-          () -> service.deleteBook(book.getId()),
-          () -> assertTrue(service.findAllBooks().isEmpty()),
-          () -> assertThrows(NotFoundException.class, () -> service.findBookById(book.getId())));
+      assertEquals("Clean Code", service.findBookById(book.getId()).getName());
+    }
+
+    @Test
+    @DisplayName("tras actualizar se lee el nombre nuevo")
+    void trasActualizarSeLeeElNombreNuevo() {
+      InMemoryBookCatalog catalog = new InMemoryBookCatalog();
+      BookServiceImpl service = catalog.service();
+      Book book = new Book("978-1", "Clean Code", "CC-1", "desc");
+      service.createBook(book);
+      book.setName("Refactoring");
+      service.updateBook(book);
+
+      assertEquals("Refactoring", service.findBookById(book.getId()).getName());
+    }
+
+    @Test
+    @DisplayName("tras borrar el catálogo queda vacío")
+    void trasBorrarQuedaVacio() {
+      InMemoryBookCatalog catalog = new InMemoryBookCatalog();
+      BookServiceImpl service = catalog.service();
+      Book book = new Book("978-1", "Clean Code", "CC-1", "desc");
+      service.createBook(book);
+      service.deleteBook(book.getId());
+
+      assertTrue(service.findAllBooks().isEmpty());
+    }
+
+    @Test
+    @DisplayName("tras borrar findById lanza NotFoundException")
+    void trasBorrarFindByIdLanza() {
+      InMemoryBookCatalog catalog = new InMemoryBookCatalog();
+      BookServiceImpl service = catalog.service();
+      Book book = new Book("978-1", "Clean Code", "CC-1", "desc");
+      service.createBook(book);
+      Long id = book.getId();
+      service.deleteBook(id);
+
+      assertThrows(NotFoundException.class, () -> service.findBookById(id));
     }
   }
 }
