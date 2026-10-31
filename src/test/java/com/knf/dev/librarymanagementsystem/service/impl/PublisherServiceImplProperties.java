@@ -124,14 +124,31 @@ class PublisherServiceImplProperties {
   }
 
   @Property(tries = 30)
-  void deleteInexistenteNuncaBorra(@ForAll long id) {
+  void deleteInexistenteLanza(@ForAll long id) {
     PublisherRepository repository = mock(PublisherRepository.class);
     when(repository.findById(id)).thenReturn(Optional.empty());
     PublisherServiceImpl service = new PublisherServiceImpl(repository);
 
     assertAll(
-        "Comprobar que si la editorial no existe se lanza NotFoundException y nunca se llama a deleteById",
-        () -> assertThrows(NotFoundException.class, () -> service.deletePublisher(id)),
+        "Comprobar que si la editorial no existe se lanza NotFoundException",
+        () -> assertThrows(NotFoundException.class, () -> service.deletePublisher(id))
+    );
+  }
+
+  @Property(tries = 30)
+  void deleteInexistenteNuncaBorra(@ForAll long id) {
+    PublisherRepository repository = mock(PublisherRepository.class);
+    when(repository.findById(id)).thenReturn(Optional.empty());
+    PublisherServiceImpl service = new PublisherServiceImpl(repository);
+
+    try {
+      service.deletePublisher(id);
+    } catch (NotFoundException ignored) {
+      // esperado: la editorial no existe
+    }
+
+    assertAll(
+        "Comprobar que si la editorial no existe nunca se llama a deleteById",
         () -> verify(repository, never()).deleteById(anyLong())
     );
   }

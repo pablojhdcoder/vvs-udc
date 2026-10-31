@@ -153,7 +153,21 @@ class PublisherServiceIntegrationTest {
   }
 
   @Test
-  void testDeletePublisherAmongSeveral() {
+  void testDeletePublisherAmongSeveral_deletedGone() {
+    Long idBorrada = crear("Pearson");
+    crear("Anaya");
+
+    publisherService.deletePublisher(idBorrada);
+    recargar();
+
+    assertAll(
+        "Comprobar que al borrar una editorial entre varias esa desaparece",
+        () -> assertTrue(publisherRepository.findById(idBorrada).isEmpty())
+    );
+  }
+
+  @Test
+  void testDeletePublisherAmongSeveral_otherRemains() {
     Long idBorrada = crear("Pearson");
     Long idQueQueda = crear("Anaya");
 
@@ -161,8 +175,7 @@ class PublisherServiceIntegrationTest {
     recargar();
 
     assertAll(
-        "Comprobar que al borrar una editorial entre varias solo desaparece esa",
-        () -> assertTrue(publisherRepository.findById(idBorrada).isEmpty()),
+        "Comprobar que al borrar una editorial entre varias la otra sigue",
         () -> assertEquals("Anaya", publisherService.findPublisherById(idQueQueda).getName())
     );
   }
@@ -269,23 +282,51 @@ class PublisherServiceIntegrationTest {
   }
 
   @Test
-  void testPublisherLifecycle() {
+  void testPublisherLifecycle_emptyAtStart() {
     boolean vaciaAlPrincipio = publisherService.findAllPublishers().isEmpty();
+
+    assertAll(
+        "Comprobar que al inicio del ciclo H2 no tiene editoriales",
+        () -> assertTrue(vaciaAlPrincipio)
+    );
+  }
+
+  @Test
+  void testPublisherLifecycle_readAfterCreate() {
     Long id = crear("Pearson");
-    String nombreLeido = publisherService.findPublisherById(id).getName();
+
+    assertAll(
+        "Comprobar que tras crear en el ciclo se lee el nombre original en H2",
+        () -> assertEquals("Pearson", publisherService.findPublisherById(id).getName())
+    );
+  }
+
+  @Test
+  void testPublisherLifecycle_nameAfterUpdate() {
+    Long id = crear("Pearson");
     Publisher stored = publisherService.findPublisherById(id);
     stored.setName("Anaya");
     publisherService.updatePublisher(stored);
     recargar();
-    String nombreActualizado = publisherService.findPublisherById(id).getName();
+
+    assertAll(
+        "Comprobar que tras actualizar en el ciclo H2 guarda el nombre nuevo",
+        () -> assertEquals("Anaya", publisherService.findPublisherById(id).getName())
+    );
+  }
+
+  @Test
+  void testPublisherLifecycle_notFoundAfterDelete() {
+    Long id = crear("Pearson");
+    Publisher stored = publisherService.findPublisherById(id);
+    stored.setName("Anaya");
+    publisherService.updatePublisher(stored);
+    recargar();
     publisherService.deletePublisher(id);
     recargar();
 
     assertAll(
-        "Comprobar el ciclo vacío → crear → leer → actualizar → borrar → no encontrado contra H2",
-        () -> assertTrue(vaciaAlPrincipio),
-        () -> assertEquals("Pearson", nombreLeido),
-        () -> assertEquals("Anaya", nombreActualizado),
+        "Comprobar que tras borrar en el ciclo buscar la editorial lanza NotFoundException",
         () -> assertThrows(NotFoundException.class, () -> publisherService.findPublisherById(id))
     );
   }
