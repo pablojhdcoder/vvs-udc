@@ -1,6 +1,5 @@
 package com.knf.dev.librarymanagementsystem.quality;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,11 +44,8 @@ class UserServiceImplPerformanceTest {
       String report = buffer.toString();
       System.out.println(report);
 
-      assertAll(
-          "Comprobar que JETM registra las medidas con 10 y 1000 roles",
-          () -> assertTrue(report.contains("user.loadUserByUsername.roles=10")),
-          () -> assertTrue(report.contains("user.loadUserByUsername.roles=1000"))
-      );
+      assertTrue(report.contains("user.loadUserByUsername.roles=10")
+          && report.contains("user.loadUserByUsername.roles=1000"));
     } finally {
       if (arrancadoAqui) {
         monitor.stop();

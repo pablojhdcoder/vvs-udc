@@ -1,6 +1,5 @@
 package com.knf.dev.librarymanagementsystem.quality;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,11 +39,10 @@ class BookServiceImplPerformanceTest {
       monitor.render(new SimpleTextRenderer(buffer));
       String report = buffer.toString();
 
-      assertAll(
-          () -> assertTrue(report.contains("findPaginated.n=100")),
-          () -> assertTrue(report.contains("findPaginated.n=5000")),
-          () -> assertTrue(report.contains("50")),
-          () -> assertTrue(report.contains("20")));
+      assertTrue(report.contains("findPaginated.n=100")
+          && report.contains("findPaginated.n=5000")
+          && report.contains("50")
+          && report.contains("20"));
       System.out.println(report);
     } finally {
       monitor.stop();

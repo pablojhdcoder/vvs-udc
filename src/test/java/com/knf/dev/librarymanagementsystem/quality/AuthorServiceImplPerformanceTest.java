@@ -42,10 +42,10 @@ class AuthorServiceImplPerformanceTest {
 			monitor.render(new SimpleTextRenderer(buffer));
 			String report = buffer.toString();
 
-			assertTrue(report.contains("findPaginated.n=100"));
-			assertTrue(report.contains("findPaginated.n=5000"));
-			assertTrue(report.contains("50"));
-			assertTrue(report.contains("20"));
+			assertTrue(report.contains("findPaginated.n=100")
+					&& report.contains("findPaginated.n=5000")
+					&& report.contains("50")
+					&& report.contains("20"));
 			System.out.println(report);
 		} finally {
 			monitor.stop();

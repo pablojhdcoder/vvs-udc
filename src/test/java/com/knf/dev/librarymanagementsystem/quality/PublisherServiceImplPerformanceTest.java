@@ -1,6 +1,5 @@
 package com.knf.dev.librarymanagementsystem.quality;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -45,11 +44,8 @@ class PublisherServiceImplPerformanceTest {
       String report = buffer.toString();
       System.out.println(report);
 
-      assertAll(
-          "Comprobar que JETM registra las medidas con 100 y 5000 editoriales",
-          () -> assertTrue(report.contains("publisher.findAllYMapper.n=100")),
-          () -> assertTrue(report.contains("publisher.findAllYMapper.n=5000"))
-      );
+      assertTrue(report.contains("publisher.findAllYMapper.n=100")
+          && report.contains("publisher.findAllYMapper.n=5000"));
     } finally {
       if (arrancadoAqui) {
         monitor.stop();
