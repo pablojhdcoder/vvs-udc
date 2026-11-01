@@ -1,5 +1,15 @@
 # Java, Spring Boot Mini Project - Library Management System
 
+## Práctica VVS (tests y calidad)
+
+Informes de la rúbrica en [`docs/`](docs/README.md)
+(cobertura, mutación, SpotBugs, Checkstyle, ArchUnit, JETM).
+Capturas de los HTML en `docs/capturas/`.
+
+```bash
+mvn test
+mvn org.pitest:pitest-maven:mutationCoverage
+```
 
 # Local setup
 
